@@ -20,8 +20,8 @@
     "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md}\""
   },
   "devDependencies": {
-    "prettier": "^3.2.4",
     "eslint": "^8.56.0",
+    "prettier": "^3.2.4",
     "typescript": "^5.3.3"
   },
   "engines": {

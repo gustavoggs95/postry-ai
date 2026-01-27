@@ -8,6 +8,7 @@ import { errorHandler, notFoundHandler } from './middleware/error.js';
 import indexRoutes from './routes/index.js';
 import brandRoutes from './routes/brands.js';
 import contentRoutes from './routes/content.js';
+import assetRoutes from './routes/assets.js';
 
 const app = express();
 
@@ -37,6 +38,7 @@ if (!config.isProduction) {
 app.use('/api/v1', indexRoutes);
 app.use('/api/v1/brands', brandRoutes);
 app.use('/api/v1/content', contentRoutes);
+app.use('/api/v1/assets', assetRoutes);
 
 // Error handling
 app.use(notFoundHandler);

@@ -17,6 +17,7 @@ import {
   ChevronRight,
   TrendingUp,
   Clock,
+  Video,
 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 
@@ -27,6 +28,7 @@ interface DashboardClientProps {
 const sidebarItems = [
   { icon: LayoutDashboard, label: 'Dashboard', href: '/dashboard', active: true },
   { icon: Sparkles, label: 'Generate', href: '/dashboard/generate' },
+  { icon: Video, label: 'Assets', href: '/dashboard/assets' },
   { icon: Palette, label: 'Brand Presets', href: '/dashboard/brands' },
   { icon: FileText, label: 'Content', href: '/dashboard/content' },
   { icon: Calendar, label: 'Calendar', href: '/dashboard/calendar' },

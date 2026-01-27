@@ -3,8 +3,8 @@
 **Multimodal Content Orchestrator** - Transform blog articles into multi-platform social content automatically.
 
 ![Postry AI](https://img.shields.io/badge/Postry-AI-8b5cf6?style=for-the-badge)
-![Next.js](https://img.shields.io/badge/Next.js-14-black?style=for-the-badge)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.3-blue?style=for-the-badge)
+![Next.js](https://img.shields.io/badge/Next.js-16-black?style=for-the-badge)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.8-blue?style=for-the-badge)
 ![Supabase](https://img.shields.io/badge/Supabase-PostgreSQL-green?style=for-the-badge)
 
 ## ✨ Features
@@ -19,7 +19,7 @@
 
 | Layer | Technology |
 |-------|------------|
-| Frontend | Next.js 14, React, Tailwind CSS |
+| Frontend | Next.js 16, React 19, Tailwind CSS |
 | Backend | Node.js, Express |
 | Database | Supabase (PostgreSQL) |
 | Authentication | Supabase Auth + Google OAuth |

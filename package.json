@@ -8,14 +8,14 @@
     "packages/*"
   ],
   "scripts": {
-    "dev": "yarn workspaces foreach -p run dev",
+    "dev": "yarn workspaces foreach -A -p -i run dev",
     "dev:frontend": "yarn workspace @postry/frontend dev",
     "dev:backend": "yarn workspace @postry/backend dev",
-    "build": "yarn workspaces foreach -p run build",
+    "build": "yarn workspaces foreach -A -p run build",
     "build:frontend": "yarn workspace @postry/frontend build",
     "build:backend": "yarn workspace @postry/backend build",
-    "lint": "yarn workspaces foreach -p run lint",
-    "lint:fix": "yarn workspaces foreach -p run lint:fix",
+    "lint": "yarn workspaces foreach -A -p run lint",
+    "lint:fix": "yarn workspaces foreach -A -p run lint:fix",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
     "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md}\""
   },

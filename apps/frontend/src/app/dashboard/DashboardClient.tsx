@@ -55,17 +55,17 @@ export default function DashboardClient({ user }: DashboardClientProps) {
   const userName = user.user_metadata?.full_name || user.email?.split('@')[0] || 'User';
 
   return (
-    <div className="min-h-screen bg-background flex">
+    <div className="bg-background flex min-h-screen">
       {/* Sidebar */}
       <aside
-        className={`${sidebarOpen ? 'w-64' : 'w-20'} bg-background-secondary border-r border-border transition-all duration-300 flex flex-col`}
+        className={`${sidebarOpen ? 'w-64' : 'w-20'} bg-background-secondary border-border flex flex-col border-r transition-all duration-300`}
       >
         {/* Logo */}
-        <div className="h-16 flex items-center gap-2 px-4 border-b border-border">
-          <div className="w-10 h-10 rounded-xl bg-gradient-primary flex items-center justify-center flex-shrink-0">
-            <Sparkles className="w-5 h-5 text-white" />
+        <div className="border-border flex h-16 items-center gap-2 border-b px-4">
+          <div className="bg-gradient-primary flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl">
+            <Sparkles className="h-5 w-5 text-white" />
           </div>
-          {sidebarOpen && <span className="text-xl font-bold text-foreground">Postry AI</span>}
+          {sidebarOpen && <span className="text-foreground text-xl font-bold">Postry AI</span>}
         </div>
 
         {/* Navigation */}
@@ -75,13 +75,13 @@ export default function DashboardClient({ user }: DashboardClientProps) {
               <li key={item.label}>
                 <a
                   href={item.href}
-                  className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors ${
+                  className={`flex items-center gap-3 rounded-lg px-3 py-2.5 transition-colors ${
                     item.active
                       ? 'bg-primary/10 text-primary'
                       : 'text-foreground-muted hover:bg-background-tertiary hover:text-foreground'
                   }`}
                 >
-                  <item.icon className="w-5 h-5 flex-shrink-0" />
+                  <item.icon className="h-5 w-5 flex-shrink-0" />
                   {sidebarOpen && <span className="font-medium">{item.label}</span>}
                 </a>
               </li>
@@ -90,23 +90,23 @@ export default function DashboardClient({ user }: DashboardClientProps) {
         </nav>
 
         {/* User section */}
-        <div className="p-4 border-t border-border">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
+        <div className="border-border border-t p-4">
+          <div className="mb-4 flex items-center gap-3">
+            <div className="bg-primary/20 flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full">
               <span className="text-primary font-medium">{userName.charAt(0).toUpperCase()}</span>
             </div>
             {sidebarOpen && (
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-foreground truncate">{userName}</p>
-                <p className="text-xs text-foreground-muted truncate">{user.email}</p>
+              <div className="min-w-0 flex-1">
+                <p className="text-foreground truncate text-sm font-medium">{userName}</p>
+                <p className="text-foreground-muted truncate text-xs">{user.email}</p>
               </div>
             )}
           </div>
           <button
             onClick={handleSignOut}
-            className={`flex items-center gap-3 px-3 py-2 rounded-lg text-foreground-muted hover:bg-background-tertiary hover:text-foreground transition-colors w-full ${!sidebarOpen && 'justify-center'}`}
+            className={`text-foreground-muted hover:bg-background-tertiary hover:text-foreground flex w-full items-center gap-3 rounded-lg px-3 py-2 transition-colors ${!sidebarOpen && 'justify-center'}`}
           >
-            <LogOut className="w-5 h-5" />
+            <LogOut className="h-5 w-5" />
             {sidebarOpen && <span className="font-medium">Sign Out</span>}
           </button>
         </div>
@@ -115,13 +115,13 @@ export default function DashboardClient({ user }: DashboardClientProps) {
       {/* Main content */}
       <main className="flex-1 overflow-auto">
         {/* Header */}
-        <header className="h-16 border-b border-border flex items-center justify-between px-6">
+        <header className="border-border flex h-16 items-center justify-between border-b px-6">
           <div>
-            <h1 className="text-xl font-semibold text-foreground">Dashboard</h1>
-            <p className="text-sm text-foreground-muted">Welcome back, {userName}!</p>
+            <h1 className="text-foreground text-xl font-semibold">Dashboard</h1>
+            <p className="text-foreground-muted text-sm">Welcome back, {userName}!</p>
           </div>
           <button className="btn-primary">
-            <Plus className="w-4 h-4 mr-2" />
+            <Plus className="mr-2 h-4 w-4" />
             New Content
           </button>
         </header>
@@ -129,78 +129,78 @@ export default function DashboardClient({ user }: DashboardClientProps) {
         {/* Content */}
         <div className="p-6">
           {/* Stats Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+          <div className="mb-8 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
             {stats.map((stat) => (
               <div key={stat.label} className="card">
                 <div className="flex items-start justify-between">
                   <div>
                     <p className="text-foreground-muted text-sm">{stat.label}</p>
-                    <p className="text-3xl font-bold text-foreground mt-1">{stat.value}</p>
+                    <p className="text-foreground mt-1 text-3xl font-bold">{stat.value}</p>
                   </div>
-                  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-                    <stat.icon className="w-5 h-5 text-primary" />
+                  <div className="bg-primary/10 flex h-10 w-10 items-center justify-center rounded-lg">
+                    <stat.icon className="text-primary h-5 w-5" />
                   </div>
                 </div>
-                <p className="text-xs text-success mt-2">{stat.trend} from last month</p>
+                <p className="text-success mt-2 text-xs">{stat.trend} from last month</p>
               </div>
             ))}
           </div>
 
           {/* Quick Actions */}
           <div className="mb-8">
-            <h2 className="text-lg font-semibold text-foreground mb-4">Quick Actions</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <h2 className="text-foreground mb-4 text-lg font-semibold">Quick Actions</h2>
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
               {/* Generate from URL */}
-              <div className="card group cursor-pointer hover:border-primary/50">
+              <div className="card hover:border-primary/50 group cursor-pointer">
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-primary flex items-center justify-center">
-                    <LinkIcon className="w-6 h-6 text-white" />
+                  <div className="bg-gradient-primary flex h-12 w-12 items-center justify-center rounded-xl">
+                    <LinkIcon className="h-6 w-6 text-white" />
                   </div>
                   <div className="flex-1">
-                    <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors">
+                    <h3 className="text-foreground group-hover:text-primary font-semibold transition-colors">
                       Generate from URL
                     </h3>
-                    <p className="text-sm text-foreground-muted">
+                    <p className="text-foreground-muted text-sm">
                       Paste a blog article URL to generate content
                     </p>
                   </div>
-                  <ChevronRight className="w-5 h-5 text-foreground-muted group-hover:text-primary transition-colors" />
+                  <ChevronRight className="text-foreground-muted group-hover:text-primary h-5 w-5 transition-colors" />
                 </div>
               </div>
 
               {/* Create Brand */}
-              <div className="card group cursor-pointer hover:border-primary/50">
+              <div className="card hover:border-primary/50 group cursor-pointer">
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-accent/20 flex items-center justify-center">
-                    <Palette className="w-6 h-6 text-accent" />
+                  <div className="bg-accent/20 flex h-12 w-12 items-center justify-center rounded-xl">
+                    <Palette className="text-accent h-6 w-6" />
                   </div>
                   <div className="flex-1">
-                    <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors">
+                    <h3 className="text-foreground group-hover:text-primary font-semibold transition-colors">
                       Create Brand Preset
                     </h3>
-                    <p className="text-sm text-foreground-muted">
+                    <p className="text-foreground-muted text-sm">
                       Save your brand voice for consistent content
                     </p>
                   </div>
-                  <ChevronRight className="w-5 h-5 text-foreground-muted group-hover:text-primary transition-colors" />
+                  <ChevronRight className="text-foreground-muted group-hover:text-primary h-5 w-5 transition-colors" />
                 </div>
               </div>
 
               {/* Transform Video */}
-              <div className="card group cursor-pointer hover:border-primary/50">
+              <div className="card hover:border-primary/50 group cursor-pointer">
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-success/20 flex items-center justify-center">
-                    <Zap className="w-6 h-6 text-success" />
+                  <div className="bg-success/20 flex h-12 w-12 items-center justify-center rounded-xl">
+                    <Zap className="text-success h-6 w-6" />
                   </div>
                   <div className="flex-1">
-                    <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors">
+                    <h3 className="text-foreground group-hover:text-primary font-semibold transition-colors">
                       Transform Video
                     </h3>
-                    <p className="text-sm text-foreground-muted">
+                    <p className="text-foreground-muted text-sm">
                       Upload a video to repurpose into multiple formats
                     </p>
                   </div>
-                  <ChevronRight className="w-5 h-5 text-foreground-muted group-hover:text-primary transition-colors" />
+                  <ChevronRight className="text-foreground-muted group-hover:text-primary h-5 w-5 transition-colors" />
                 </div>
               </div>
             </div>
@@ -208,18 +208,18 @@ export default function DashboardClient({ user }: DashboardClientProps) {
 
           {/* Recent Content */}
           <div>
-            <h2 className="text-lg font-semibold text-foreground mb-4">Recent Content</h2>
+            <h2 className="text-foreground mb-4 text-lg font-semibold">Recent Content</h2>
             <div className="card">
-              <div className="text-center py-12">
-                <div className="w-16 h-16 rounded-2xl bg-background-tertiary mx-auto mb-4 flex items-center justify-center">
-                  <FileText className="w-8 h-8 text-foreground-muted" />
+              <div className="py-12 text-center">
+                <div className="bg-background-tertiary mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl">
+                  <FileText className="text-foreground-muted h-8 w-8" />
                 </div>
-                <h3 className="text-lg font-medium text-foreground mb-2">No content yet</h3>
+                <h3 className="text-foreground mb-2 text-lg font-medium">No content yet</h3>
                 <p className="text-foreground-muted mb-4">
                   Start by generating content from a URL or creating a brand preset
                 </p>
                 <button className="btn-primary">
-                  <Plus className="w-4 h-4 mr-2" />
+                  <Plus className="mr-2 h-4 w-4" />
                   Generate Your First Content
                 </button>
               </div>

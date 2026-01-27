@@ -4,9 +4,11 @@ import AssetsClient from './AssetsClient';
 
 export default async function AssetsPage() {
   const supabase = await createServerClient();
-  
-  const { data: { user } } = await supabase.auth.getUser();
-  
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
   if (!user) {
     redirect('/login');
   }
@@ -19,10 +21,7 @@ export default async function AssetsPage() {
     .order('created_at', { ascending: false });
 
   // Fetch user's brands for content generation
-  const { data: brands } = await supabase
-    .from('brands')
-    .select('*')
-    .eq('user_id', user.id);
+  const { data: brands } = await supabase.from('brands').select('*').eq('user_id', user.id);
 
   return <AssetsClient initialAssets={assets || []} brands={brands || []} />;
 }

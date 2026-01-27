@@ -160,14 +160,14 @@ export default function GenerateClient({ user, initialBrands }: GenerateClientPr
   const userName = user.user_metadata?.full_name || user.email?.split('@')[0] || 'User';
 
   return (
-    <div className="min-h-screen bg-background flex">
+    <div className="bg-background flex min-h-screen">
       {/* Sidebar */}
-      <aside className="w-64 bg-background-secondary border-r border-border flex flex-col">
-        <div className="h-16 flex items-center gap-2 px-4 border-b border-border">
-          <div className="w-10 h-10 rounded-xl bg-gradient-primary flex items-center justify-center">
-            <Sparkles className="w-5 h-5 text-white" />
+      <aside className="bg-background-secondary border-border flex w-64 flex-col border-r">
+        <div className="border-border flex h-16 items-center gap-2 border-b px-4">
+          <div className="bg-gradient-primary flex h-10 w-10 items-center justify-center rounded-xl">
+            <Sparkles className="h-5 w-5 text-white" />
           </div>
-          <span className="text-xl font-bold text-foreground">Postry AI</span>
+          <span className="text-foreground text-xl font-bold">Postry AI</span>
         </div>
 
         <nav className="flex-1 p-4">
@@ -176,13 +176,13 @@ export default function GenerateClient({ user, initialBrands }: GenerateClientPr
               <li key={item.label}>
                 <a
                   href={item.href}
-                  className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors ${
+                  className={`flex items-center gap-3 rounded-lg px-3 py-2.5 transition-colors ${
                     item.active
                       ? 'bg-primary/10 text-primary'
                       : 'text-foreground-muted hover:bg-background-tertiary hover:text-foreground'
                   }`}
                 >
-                  <item.icon className="w-5 h-5" />
+                  <item.icon className="h-5 w-5" />
                   <span className="font-medium">{item.label}</span>
                 </a>
               </li>
@@ -190,21 +190,21 @@ export default function GenerateClient({ user, initialBrands }: GenerateClientPr
           </ul>
         </nav>
 
-        <div className="p-4 border-t border-border">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
+        <div className="border-border border-t p-4">
+          <div className="mb-4 flex items-center gap-3">
+            <div className="bg-primary/20 flex h-10 w-10 items-center justify-center rounded-full">
               <span className="text-primary font-medium">{userName.charAt(0).toUpperCase()}</span>
             </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-foreground truncate">{userName}</p>
-              <p className="text-xs text-foreground-muted truncate">{user.email}</p>
+            <div className="min-w-0 flex-1">
+              <p className="text-foreground truncate text-sm font-medium">{userName}</p>
+              <p className="text-foreground-muted truncate text-xs">{user.email}</p>
             </div>
           </div>
           <button
             onClick={handleSignOut}
-            className="flex items-center gap-3 px-3 py-2 rounded-lg text-foreground-muted hover:bg-background-tertiary hover:text-foreground transition-colors w-full"
+            className="text-foreground-muted hover:bg-background-tertiary hover:text-foreground flex w-full items-center gap-3 rounded-lg px-3 py-2 transition-colors"
           >
-            <LogOut className="w-5 h-5" />
+            <LogOut className="h-5 w-5" />
             <span className="font-medium">Sign Out</span>
           </button>
         </div>
@@ -212,24 +212,24 @@ export default function GenerateClient({ user, initialBrands }: GenerateClientPr
 
       {/* Main content */}
       <main className="flex-1 overflow-auto">
-        <header className="h-16 border-b border-border flex items-center justify-between px-6">
+        <header className="border-border flex h-16 items-center justify-between border-b px-6">
           <div>
-            <h1 className="text-xl font-semibold text-foreground">Generate Content</h1>
-            <p className="text-sm text-foreground-muted">
+            <h1 className="text-foreground text-xl font-semibold">Generate Content</h1>
+            <p className="text-foreground-muted text-sm">
               Transform articles into multi-platform content
             </p>
           </div>
         </header>
 
         <div className="p-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
             {/* Input Section */}
             <div className="space-y-6">
               {/* Brand Selection */}
               <div className="card">
-                <h3 className="text-lg font-semibold text-foreground mb-4">Brand Voice</h3>
+                <h3 className="text-foreground mb-4 text-lg font-semibold">Brand Voice</h3>
                 {brands.length === 0 ? (
-                  <div className="text-center py-6">
+                  <div className="py-6 text-center">
                     <p className="text-foreground-muted mb-3">No brand presets yet</p>
                     <a href="/dashboard/brands" className="btn-primary inline-flex">
                       Create Brand Preset
@@ -240,18 +240,18 @@ export default function GenerateClient({ user, initialBrands }: GenerateClientPr
                     <button
                       type="button"
                       onClick={() => setBrandDropdownOpen(!brandDropdownOpen)}
-                      className="w-full flex items-center justify-between p-3 rounded-lg border border-border bg-background hover:border-border-light transition-colors"
+                      className="border-border bg-background hover:border-border-light flex w-full items-center justify-between rounded-lg border p-3 transition-colors"
                     >
                       <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center">
-                          <Palette className="w-4 h-4 text-primary" />
+                        <div className="bg-primary/20 flex h-8 w-8 items-center justify-center rounded-lg">
+                          <Palette className="text-primary h-4 w-4" />
                         </div>
                         <div className="text-left">
-                          <p className="font-medium text-foreground">
+                          <p className="text-foreground font-medium">
                             {selectedBrand?.name || 'Select a brand'}
                           </p>
                           {selectedBrand && (
-                            <p className="text-xs text-foreground-muted capitalize">
+                            <p className="text-foreground-muted text-xs capitalize">
                               {selectedBrand.tone}
                               {selectedBrand.use_emojis && ' • Uses emojis'}
                             </p>
@@ -259,12 +259,12 @@ export default function GenerateClient({ user, initialBrands }: GenerateClientPr
                         </div>
                       </div>
                       <ChevronDown
-                        className={`w-5 h-5 text-foreground-muted transition-transform ${brandDropdownOpen ? 'rotate-180' : ''}`}
+                        className={`text-foreground-muted h-5 w-5 transition-transform ${brandDropdownOpen ? 'rotate-180' : ''}`}
                       />
                     </button>
 
                     {brandDropdownOpen && (
-                      <div className="absolute top-full left-0 right-0 mt-2 bg-background-secondary border border-border rounded-lg shadow-xl z-10 max-h-60 overflow-auto">
+                      <div className="bg-background-secondary border-border absolute left-0 right-0 top-full z-10 mt-2 max-h-60 overflow-auto rounded-lg border shadow-xl">
                         {brands.map((brand) => (
                           <button
                             key={brand.id}
@@ -272,21 +272,21 @@ export default function GenerateClient({ user, initialBrands }: GenerateClientPr
                               selectBrand(brand);
                               setBrandDropdownOpen(false);
                             }}
-                            className={`w-full flex items-center gap-3 p-3 hover:bg-background-tertiary transition-colors ${
+                            className={`hover:bg-background-tertiary flex w-full items-center gap-3 p-3 transition-colors ${
                               selectedBrand?.id === brand.id ? 'bg-primary/10' : ''
                             }`}
                           >
-                            <div className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center">
-                              <Palette className="w-4 h-4 text-primary" />
+                            <div className="bg-primary/20 flex h-8 w-8 items-center justify-center rounded-lg">
+                              <Palette className="text-primary h-4 w-4" />
                             </div>
                             <div className="text-left">
-                              <p className="font-medium text-foreground">{brand.name}</p>
-                              <p className="text-xs text-foreground-muted capitalize">
+                              <p className="text-foreground font-medium">{brand.name}</p>
+                              <p className="text-foreground-muted text-xs capitalize">
                                 {brand.tone}
                               </p>
                             </div>
                             {brand.is_default && (
-                              <span className="ml-auto text-xs text-primary">Default</span>
+                              <span className="text-primary ml-auto text-xs">Default</span>
                             )}
                           </button>
                         ))}
@@ -298,28 +298,28 @@ export default function GenerateClient({ user, initialBrands }: GenerateClientPr
 
               {/* Input Type Toggle */}
               <div className="card">
-                <h3 className="text-lg font-semibold text-foreground mb-4">Content Source</h3>
-                <div className="flex gap-2 mb-4">
+                <h3 className="text-foreground mb-4 text-lg font-semibold">Content Source</h3>
+                <div className="mb-4 flex gap-2">
                   <button
                     onClick={() => setInputType('url')}
-                    className={`flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg border transition-colors ${
+                    className={`flex flex-1 items-center justify-center gap-2 rounded-lg border px-4 py-2.5 transition-colors ${
                       inputType === 'url'
                         ? 'border-primary bg-primary/10 text-primary'
                         : 'border-border text-foreground-muted hover:border-border-light'
                     }`}
                   >
-                    <LinkIcon className="w-4 h-4" />
+                    <LinkIcon className="h-4 w-4" />
                     From URL
                   </button>
                   <button
                     onClick={() => setInputType('text')}
-                    className={`flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg border transition-colors ${
+                    className={`flex flex-1 items-center justify-center gap-2 rounded-lg border px-4 py-2.5 transition-colors ${
                       inputType === 'text'
                         ? 'border-primary bg-primary/10 text-primary'
                         : 'border-border text-foreground-muted hover:border-border-light'
                     }`}
                   >
-                    <Type className="w-4 h-4" />
+                    <Type className="h-4 w-4" />
                     From Text
                   </button>
                 </div>
@@ -357,20 +357,22 @@ export default function GenerateClient({ user, initialBrands }: GenerateClientPr
 
               {/* Platform Selection */}
               <div className="card">
-                <h3 className="text-lg font-semibold text-foreground mb-4">Target Platforms</h3>
+                <h3 className="text-foreground mb-4 text-lg font-semibold">Target Platforms</h3>
                 <div className="grid grid-cols-2 gap-3">
                   {platformOptions.map((platform) => (
                     <button
                       key={platform.id}
                       onClick={() => togglePlatform(platform.id)}
-                      className={`flex items-center gap-3 p-3 rounded-lg border transition-colors ${
+                      className={`flex items-center gap-3 rounded-lg border p-3 transition-colors ${
                         selectedPlatforms.includes(platform.id)
                           ? 'border-primary bg-primary/10'
                           : 'border-border hover:border-border-light'
                       }`}
                     >
-                      <div className={`w-8 h-8 rounded-lg ${platform.color} flex items-center justify-center`}>
-                        <platform.icon className="w-4 h-4 text-white" />
+                      <div
+                        className={`h-8 w-8 rounded-lg ${platform.color} flex items-center justify-center`}
+                      >
+                        <platform.icon className="h-4 w-4 text-white" />
                       </div>
                       <span
                         className={`font-medium ${selectedPlatforms.includes(platform.id) ? 'text-primary' : 'text-foreground'}`}
@@ -386,24 +388,24 @@ export default function GenerateClient({ user, initialBrands }: GenerateClientPr
               <div className="card">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-accent/20 flex items-center justify-center">
-                      <ImageIcon className="w-5 h-5 text-accent" />
+                    <div className="bg-accent/20 flex h-10 w-10 items-center justify-center rounded-lg">
+                      <ImageIcon className="text-accent h-5 w-5" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-foreground">Generate Cover Image</h3>
-                      <p className="text-sm text-foreground-muted">
+                      <h3 className="text-foreground font-semibold">Generate Cover Image</h3>
+                      <p className="text-foreground-muted text-sm">
                         Create an AI-generated cover image
                       </p>
                     </div>
                   </div>
                   <button
                     onClick={() => setGenerateImage(!generateImage)}
-                    className={`w-12 h-6 rounded-full transition-colors relative ${
+                    className={`relative h-6 w-12 rounded-full transition-colors ${
                       generateImage ? 'bg-primary' : 'bg-border'
                     }`}
                   >
                     <span
-                      className={`absolute top-1 w-4 h-4 rounded-full bg-white transition-transform ${
+                      className={`absolute top-1 h-4 w-4 rounded-full bg-white transition-transform ${
                         generateImage ? 'translate-x-7' : 'translate-x-1'
                       }`}
                     />
@@ -413,7 +415,7 @@ export default function GenerateClient({ user, initialBrands }: GenerateClientPr
 
               {/* Error Message */}
               {error && (
-                <div className="bg-error/10 border border-error/20 text-error rounded-lg p-3 text-sm">
+                <div className="bg-error/10 border-error/20 text-error rounded-lg border p-3 text-sm">
                   {error}
                 </div>
               )}
@@ -426,12 +428,12 @@ export default function GenerateClient({ user, initialBrands }: GenerateClientPr
               >
                 {isGenerating ? (
                   <>
-                    <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                    <Loader2 className="mr-2 h-5 w-5 animate-spin" />
                     Generating Content...
                   </>
                 ) : (
                   <>
-                    <Sparkles className="w-5 h-5 mr-2" />
+                    <Sparkles className="mr-2 h-5 w-5" />
                     Generate Content
                   </>
                 )}
@@ -441,23 +443,19 @@ export default function GenerateClient({ user, initialBrands }: GenerateClientPr
             {/* Output Section */}
             <div className="space-y-6">
               <div className="card">
-                <h3 className="text-lg font-semibold text-foreground mb-4">Generated Content</h3>
+                <h3 className="text-foreground mb-4 text-lg font-semibold">Generated Content</h3>
 
                 {Object.keys(generatedContent).length === 0 && !isGenerating ? (
-                  <div className="text-center py-12">
-                    <div className="w-16 h-16 rounded-2xl bg-background-tertiary mx-auto mb-4 flex items-center justify-center">
-                      <Sparkles className="w-8 h-8 text-foreground-muted" />
+                  <div className="py-12 text-center">
+                    <div className="bg-background-tertiary mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl">
+                      <Sparkles className="text-foreground-muted h-8 w-8" />
                     </div>
-                    <p className="text-foreground-muted">
-                      Your generated content will appear here
-                    </p>
+                    <p className="text-foreground-muted">Your generated content will appear here</p>
                   </div>
                 ) : isGenerating ? (
-                  <div className="text-center py-12">
-                    <Loader2 className="w-12 h-12 text-primary mx-auto mb-4 animate-spin" />
-                    <p className="text-foreground-muted">
-                      AI is crafting your content...
-                    </p>
+                  <div className="py-12 text-center">
+                    <Loader2 className="text-primary mx-auto mb-4 h-12 w-12 animate-spin" />
+                    <p className="text-foreground-muted">AI is crafting your content...</p>
                   </div>
                 ) : (
                   <div className="space-y-4">
@@ -466,51 +464,53 @@ export default function GenerateClient({ user, initialBrands }: GenerateClientPr
                       .map((platform) => (
                         <div
                           key={platform.id}
-                          className="p-4 rounded-lg bg-background border border-border"
+                          className="bg-background border-border rounded-lg border p-4"
                         >
-                          <div className="flex items-center justify-between mb-3">
+                          <div className="mb-3 flex items-center justify-between">
                             <div className="flex items-center gap-2">
                               <div
-                                className={`w-6 h-6 rounded ${platform.color} flex items-center justify-center`}
+                                className={`h-6 w-6 rounded ${platform.color} flex items-center justify-center`}
                               >
-                                <platform.icon className="w-3 h-3 text-white" />
+                                <platform.icon className="h-3 w-3 text-white" />
                               </div>
-                              <span className="font-medium text-foreground">{platform.label}</span>
+                              <span className="text-foreground font-medium">{platform.label}</span>
                             </div>
                             <div className="flex items-center gap-2">
                               <button
-                                onClick={() => handleCopy(platform.id, generatedContent[platform.id])}
-                                className="p-1.5 rounded hover:bg-background-tertiary text-foreground-muted hover:text-foreground transition-colors"
+                                onClick={() =>
+                                  handleCopy(platform.id, generatedContent[platform.id])
+                                }
+                                className="hover:bg-background-tertiary text-foreground-muted hover:text-foreground rounded p-1.5 transition-colors"
                                 title="Copy to clipboard"
                               >
                                 {copiedPlatform === platform.id ? (
-                                  <Check className="w-4 h-4 text-success" />
+                                  <Check className="text-success h-4 w-4" />
                                 ) : (
-                                  <Copy className="w-4 h-4" />
+                                  <Copy className="h-4 w-4" />
                                 )}
                               </button>
                               <button
                                 onClick={handleGenerate}
-                                className="p-1.5 rounded hover:bg-background-tertiary text-foreground-muted hover:text-foreground transition-colors"
+                                className="hover:bg-background-tertiary text-foreground-muted hover:text-foreground rounded p-1.5 transition-colors"
                                 title="Regenerate"
                               >
-                                <RefreshCw className="w-4 h-4" />
+                                <RefreshCw className="h-4 w-4" />
                               </button>
                             </div>
                           </div>
-                          <div className="text-sm text-foreground whitespace-pre-wrap">
+                          <div className="text-foreground whitespace-pre-wrap text-sm">
                             {generatedContent[platform.id]}
                           </div>
                         </div>
                       ))}
 
                     {generatedImageUrl && (
-                      <div className="p-4 rounded-lg bg-background border border-border">
-                        <div className="flex items-center gap-2 mb-3">
-                          <div className="w-6 h-6 rounded bg-accent flex items-center justify-center">
-                            <ImageIcon className="w-3 h-3 text-white" />
+                      <div className="bg-background border-border rounded-lg border p-4">
+                        <div className="mb-3 flex items-center gap-2">
+                          <div className="bg-accent flex h-6 w-6 items-center justify-center rounded">
+                            <ImageIcon className="h-3 w-3 text-white" />
                           </div>
-                          <span className="font-medium text-foreground">Cover Image</span>
+                          <span className="text-foreground font-medium">Cover Image</span>
                         </div>
                         <img
                           src={generatedImageUrl}

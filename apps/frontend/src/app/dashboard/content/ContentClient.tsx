@@ -43,10 +43,7 @@ const sidebarItems = [
   { icon: Settings, label: 'Settings', href: '/dashboard/settings' },
 ];
 
-const statusConfig: Record<
-  ContentStatus,
-  { label: string; color: string; icon: typeof Clock }
-> = {
+const statusConfig: Record<ContentStatus, { label: string; color: string; icon: typeof Clock }> = {
   draft: { label: 'Draft', color: 'bg-yellow-500/20 text-yellow-400', icon: Clock },
   approved: { label: 'Approved', color: 'bg-blue-500/20 text-blue-400', icon: CheckCircle },
   published: { label: 'Published', color: 'bg-green-500/20 text-green-400', icon: CheckCircle },
@@ -86,10 +83,7 @@ export default function ContentClient({ user, initialContent }: ContentClientPro
   };
 
   const handleStatusChange = async (id: string, status: ContentStatus) => {
-    const { error } = await supabase
-      .from('content')
-      .update({ status })
-      .eq('id', id);
+    const { error } = await supabase.from('content').update({ status }).eq('id', id);
     if (!error) {
       updateContent(id, { status });
     }
@@ -116,14 +110,14 @@ export default function ContentClient({ user, initialContent }: ContentClientPro
   };
 
   return (
-    <div className="min-h-screen bg-background flex">
+    <div className="bg-background flex min-h-screen">
       {/* Sidebar */}
-      <aside className="w-64 bg-background-secondary border-r border-border flex flex-col">
-        <div className="h-16 flex items-center gap-2 px-4 border-b border-border">
-          <div className="w-10 h-10 rounded-xl bg-gradient-primary flex items-center justify-center">
-            <Sparkles className="w-5 h-5 text-white" />
+      <aside className="bg-background-secondary border-border flex w-64 flex-col border-r">
+        <div className="border-border flex h-16 items-center gap-2 border-b px-4">
+          <div className="bg-gradient-primary flex h-10 w-10 items-center justify-center rounded-xl">
+            <Sparkles className="h-5 w-5 text-white" />
           </div>
-          <span className="text-xl font-bold text-foreground">Postry AI</span>
+          <span className="text-foreground text-xl font-bold">Postry AI</span>
         </div>
 
         <nav className="flex-1 p-4">
@@ -132,13 +126,13 @@ export default function ContentClient({ user, initialContent }: ContentClientPro
               <li key={item.label}>
                 <a
                   href={item.href}
-                  className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors ${
+                  className={`flex items-center gap-3 rounded-lg px-3 py-2.5 transition-colors ${
                     item.active
                       ? 'bg-primary/10 text-primary'
                       : 'text-foreground-muted hover:bg-background-tertiary hover:text-foreground'
                   }`}
                 >
-                  <item.icon className="w-5 h-5" />
+                  <item.icon className="h-5 w-5" />
                   <span className="font-medium">{item.label}</span>
                 </a>
               </li>
@@ -146,21 +140,21 @@ export default function ContentClient({ user, initialContent }: ContentClientPro
           </ul>
         </nav>
 
-        <div className="p-4 border-t border-border">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
+        <div className="border-border border-t p-4">
+          <div className="mb-4 flex items-center gap-3">
+            <div className="bg-primary/20 flex h-10 w-10 items-center justify-center rounded-full">
               <span className="text-primary font-medium">{userName.charAt(0).toUpperCase()}</span>
             </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-foreground truncate">{userName}</p>
-              <p className="text-xs text-foreground-muted truncate">{user.email}</p>
+            <div className="min-w-0 flex-1">
+              <p className="text-foreground truncate text-sm font-medium">{userName}</p>
+              <p className="text-foreground-muted truncate text-xs">{user.email}</p>
             </div>
           </div>
           <button
             onClick={handleSignOut}
-            className="flex items-center gap-3 px-3 py-2 rounded-lg text-foreground-muted hover:bg-background-tertiary hover:text-foreground transition-colors w-full"
+            className="text-foreground-muted hover:bg-background-tertiary hover:text-foreground flex w-full items-center gap-3 rounded-lg px-3 py-2 transition-colors"
           >
-            <LogOut className="w-5 h-5" />
+            <LogOut className="h-5 w-5" />
             <span className="font-medium">Sign Out</span>
           </button>
         </div>
@@ -168,24 +162,22 @@ export default function ContentClient({ user, initialContent }: ContentClientPro
 
       {/* Main content */}
       <main className="flex-1 overflow-auto">
-        <header className="h-16 border-b border-border flex items-center justify-between px-6">
+        <header className="border-border flex h-16 items-center justify-between border-b px-6">
           <div>
-            <h1 className="text-xl font-semibold text-foreground">Content Library</h1>
-            <p className="text-sm text-foreground-muted">
-              Manage all your generated content
-            </p>
+            <h1 className="text-foreground text-xl font-semibold">Content Library</h1>
+            <p className="text-foreground-muted text-sm">Manage all your generated content</p>
           </div>
           <a href="/dashboard/generate" className="btn-primary">
-            <Plus className="w-4 h-4 mr-2" />
+            <Plus className="mr-2 h-4 w-4" />
             New Content
           </a>
         </header>
 
         <div className="p-6">
           {/* Filters */}
-          <div className="flex flex-col sm:flex-row gap-4 mb-6">
-            <div className="relative flex-1 max-w-md">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-foreground-muted" />
+          <div className="mb-6 flex flex-col gap-4 sm:flex-row">
+            <div className="relative max-w-md flex-1">
+              <Search className="text-foreground-muted absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2" />
               <input
                 type="text"
                 placeholder="Search content..."
@@ -195,7 +187,7 @@ export default function ContentClient({ user, initialContent }: ContentClientPro
               />
             </div>
             <div className="flex items-center gap-2">
-              <Filter className="w-5 h-5 text-foreground-muted" />
+              <Filter className="text-foreground-muted h-5 w-5" />
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value as ContentStatus | 'all')}
@@ -212,11 +204,11 @@ export default function ContentClient({ user, initialContent }: ContentClientPro
 
           {/* Content Grid */}
           {filteredContent.length === 0 ? (
-            <div className="card text-center py-12">
-              <div className="w-16 h-16 rounded-2xl bg-background-tertiary mx-auto mb-4 flex items-center justify-center">
-                <FileText className="w-8 h-8 text-foreground-muted" />
+            <div className="card py-12 text-center">
+              <div className="bg-background-tertiary mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl">
+                <FileText className="text-foreground-muted h-8 w-8" />
               </div>
-              <h3 className="text-lg font-medium text-foreground mb-2">
+              <h3 className="text-foreground mb-2 text-lg font-medium">
                 {searchQuery || statusFilter !== 'all' ? 'No content found' : 'No content yet'}
               </h3>
               <p className="text-foreground-muted mb-4">
@@ -226,13 +218,13 @@ export default function ContentClient({ user, initialContent }: ContentClientPro
               </p>
               {!searchQuery && statusFilter === 'all' && (
                 <a href="/dashboard/generate" className="btn-primary inline-flex">
-                  <Plus className="w-4 h-4 mr-2" />
+                  <Plus className="mr-2 h-4 w-4" />
                   Generate Content
                 </a>
               )}
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
               {filteredContent.map((content) => {
                 const StatusIcon = statusConfig[content.status].icon;
                 const platforms = Object.keys(content.generated_content || {});
@@ -240,53 +232,53 @@ export default function ContentClient({ user, initialContent }: ContentClientPro
                 return (
                   <div key={content.id} className="card group relative">
                     {/* Menu Button */}
-                    <div className="absolute top-4 right-4">
+                    <div className="absolute right-4 top-4">
                       <button
                         onClick={() => setOpenMenuId(openMenuId === content.id ? null : content.id)}
-                        className="p-1 rounded-lg hover:bg-background-tertiary text-foreground-muted hover:text-foreground transition-colors"
+                        className="hover:bg-background-tertiary text-foreground-muted hover:text-foreground rounded-lg p-1 transition-colors"
                       >
-                        <MoreVertical className="w-5 h-5" />
+                        <MoreVertical className="h-5 w-5" />
                       </button>
 
                       {openMenuId === content.id && (
-                        <div className="absolute right-0 top-8 w-48 bg-background-secondary border border-border rounded-lg shadow-xl z-10">
+                        <div className="bg-background-secondary border-border absolute right-0 top-8 z-10 w-48 rounded-lg border shadow-xl">
                           <button
                             onClick={() => router.push(`/dashboard/content/${content.id}`)}
-                            className="flex items-center gap-2 w-full px-3 py-2 text-sm text-foreground hover:bg-background-tertiary transition-colors"
+                            className="text-foreground hover:bg-background-tertiary flex w-full items-center gap-2 px-3 py-2 text-sm transition-colors"
                           >
-                            <Edit2 className="w-4 h-4" />
+                            <Edit2 className="h-4 w-4" />
                             Edit Content
                           </button>
                           {content.status === 'draft' && (
                             <button
                               onClick={() => handleStatusChange(content.id, 'approved')}
-                              className="flex items-center gap-2 w-full px-3 py-2 text-sm text-foreground hover:bg-background-tertiary transition-colors"
+                              className="text-foreground hover:bg-background-tertiary flex w-full items-center gap-2 px-3 py-2 text-sm transition-colors"
                             >
-                              <CheckCircle className="w-4 h-4" />
+                              <CheckCircle className="h-4 w-4" />
                               Mark as Approved
                             </button>
                           )}
                           {content.status === 'approved' && (
                             <button
                               onClick={() => handleStatusChange(content.id, 'published')}
-                              className="flex items-center gap-2 w-full px-3 py-2 text-sm text-foreground hover:bg-background-tertiary transition-colors"
+                              className="text-foreground hover:bg-background-tertiary flex w-full items-center gap-2 px-3 py-2 text-sm transition-colors"
                             >
-                              <ExternalLink className="w-4 h-4" />
+                              <ExternalLink className="h-4 w-4" />
                               Mark as Published
                             </button>
                           )}
                           <button
                             onClick={() => handleStatusChange(content.id, 'archived')}
-                            className="flex items-center gap-2 w-full px-3 py-2 text-sm text-foreground hover:bg-background-tertiary transition-colors"
+                            className="text-foreground hover:bg-background-tertiary flex w-full items-center gap-2 px-3 py-2 text-sm transition-colors"
                           >
-                            <Archive className="w-4 h-4" />
+                            <Archive className="h-4 w-4" />
                             Archive
                           </button>
                           <button
                             onClick={() => handleDelete(content.id)}
-                            className="flex items-center gap-2 w-full px-3 py-2 text-sm text-error hover:bg-error/10 transition-colors"
+                            className="text-error hover:bg-error/10 flex w-full items-center gap-2 px-3 py-2 text-sm transition-colors"
                           >
-                            <Trash2 className="w-4 h-4" />
+                            <Trash2 className="h-4 w-4" />
                             Delete
                           </button>
                         </div>
@@ -295,25 +287,25 @@ export default function ContentClient({ user, initialContent }: ContentClientPro
 
                     {/* Cover Image */}
                     {content.cover_image_url && (
-                      <div className="mb-4 -mx-6 -mt-6">
+                      <div className="-mx-6 -mt-6 mb-4">
                         <img
                           src={content.cover_image_url}
                           alt="Cover"
-                          className="w-full h-32 object-cover rounded-t-xl"
+                          className="h-32 w-full rounded-t-xl object-cover"
                         />
                       </div>
                     )}
 
                     {/* Status Badge */}
-                    <div className="flex items-center gap-2 mb-3">
+                    <div className="mb-3 flex items-center gap-2">
                       <span
-                        className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${statusConfig[content.status].color}`}
+                        className={`inline-flex items-center gap-1 rounded-full px-2 py-1 text-xs font-medium ${statusConfig[content.status].color}`}
                       >
-                        <StatusIcon className="w-3 h-3" />
+                        <StatusIcon className="h-3 w-3" />
                         {statusConfig[content.status].label}
                       </span>
                       {content.brands?.name && (
-                        <span className="px-2 py-1 rounded-full text-xs font-medium bg-primary/20 text-primary">
+                        <span className="bg-primary/20 text-primary rounded-full px-2 py-1 text-xs font-medium">
                           {content.brands.name}
                         </span>
                       )}
@@ -322,34 +314,34 @@ export default function ContentClient({ user, initialContent }: ContentClientPro
                     {/* Source */}
                     <div className="mb-3">
                       {content.source_url ? (
-                        <p className="text-sm text-foreground truncate">
+                        <p className="text-foreground truncate text-sm">
                           {new URL(content.source_url).hostname}
                         </p>
                       ) : (
-                        <p className="text-sm text-foreground line-clamp-2">
+                        <p className="text-foreground line-clamp-2 text-sm">
                           {content.source_text?.substring(0, 100)}...
                         </p>
                       )}
                     </div>
 
                     {/* Platforms */}
-                    <div className="flex items-center gap-2 mb-3">
+                    <div className="mb-3 flex items-center gap-2">
                       {platforms.map((platform) => {
                         const Icon = platformIcons[platform] || FileText;
                         return (
                           <div
                             key={platform}
-                            className="w-6 h-6 rounded bg-background-tertiary flex items-center justify-center"
+                            className="bg-background-tertiary flex h-6 w-6 items-center justify-center rounded"
                             title={platform}
                           >
-                            <Icon className="w-3 h-3 text-foreground-muted" />
+                            <Icon className="text-foreground-muted h-3 w-3" />
                           </div>
                         );
                       })}
                     </div>
 
                     {/* Date */}
-                    <p className="text-xs text-foreground-muted">
+                    <p className="text-foreground-muted text-xs">
                       Created {formatDate(content.created_at)}
                     </p>
                   </div>

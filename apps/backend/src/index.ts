@@ -47,14 +47,9 @@ app.use(errorHandler);
 // Start server
 app.listen(config.port, () => {
   console.log(`
-🚀 Postry AI Backend Server
-
-   Environment: ${config.nodeEnv}
-   Port: ${config.port}
-   API URL: http://localhost:${config.port}/api/v1
-
-   Ready to generate amazing content! ✨
-  `);
+Postry AI Backend Server (${config.nodeEnv})
+Port: ${config.port}
+API URL: http://localhost:${config.port}/api/v1`);
 });
 
 export default app;

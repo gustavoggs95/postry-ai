@@ -57,8 +57,18 @@ const platformConfig: Record<string, { icon: typeof Linkedin; color: string; lab
 
 const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const MONTHS = [
-  'January', 'February', 'March', 'April', 'May', 'June',
-  'July', 'August', 'September', 'October', 'November', 'December',
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
 ];
 
 export default function CalendarClient({
@@ -69,7 +79,8 @@ export default function CalendarClient({
   const router = useRouter();
   const supabase = createClient();
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [scheduledContent, setScheduledContent] = useState<ScheduledContent[]>(initialScheduledContent);
+  const [scheduledContent, setScheduledContent] =
+    useState<ScheduledContent[]>(initialScheduledContent);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedContent, setSelectedContent] = useState<string>('');
@@ -167,14 +178,14 @@ export default function CalendarClient({
   const userName = user.user_metadata?.full_name || user.email?.split('@')[0] || 'User';
 
   return (
-    <div className="min-h-screen bg-background flex">
+    <div className="bg-background flex min-h-screen">
       {/* Sidebar */}
-      <aside className="w-64 bg-background-secondary border-r border-border flex flex-col">
-        <div className="h-16 flex items-center gap-2 px-4 border-b border-border">
-          <div className="w-10 h-10 rounded-xl bg-gradient-primary flex items-center justify-center">
-            <Sparkles className="w-5 h-5 text-white" />
+      <aside className="bg-background-secondary border-border flex w-64 flex-col border-r">
+        <div className="border-border flex h-16 items-center gap-2 border-b px-4">
+          <div className="bg-gradient-primary flex h-10 w-10 items-center justify-center rounded-xl">
+            <Sparkles className="h-5 w-5 text-white" />
           </div>
-          <span className="text-xl font-bold text-foreground">Postry AI</span>
+          <span className="text-foreground text-xl font-bold">Postry AI</span>
         </div>
 
         <nav className="flex-1 p-4">
@@ -183,13 +194,13 @@ export default function CalendarClient({
               <li key={item.label}>
                 <a
                   href={item.href}
-                  className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors ${
+                  className={`flex items-center gap-3 rounded-lg px-3 py-2.5 transition-colors ${
                     item.active
                       ? 'bg-primary/10 text-primary'
                       : 'text-foreground-muted hover:bg-background-tertiary hover:text-foreground'
                   }`}
                 >
-                  <item.icon className="w-5 h-5" />
+                  <item.icon className="h-5 w-5" />
                   <span className="font-medium">{item.label}</span>
                 </a>
               </li>
@@ -197,21 +208,21 @@ export default function CalendarClient({
           </ul>
         </nav>
 
-        <div className="p-4 border-t border-border">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
+        <div className="border-border border-t p-4">
+          <div className="mb-4 flex items-center gap-3">
+            <div className="bg-primary/20 flex h-10 w-10 items-center justify-center rounded-full">
               <span className="text-primary font-medium">{userName.charAt(0).toUpperCase()}</span>
             </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-foreground truncate">{userName}</p>
-              <p className="text-xs text-foreground-muted truncate">{user.email}</p>
+            <div className="min-w-0 flex-1">
+              <p className="text-foreground truncate text-sm font-medium">{userName}</p>
+              <p className="text-foreground-muted truncate text-xs">{user.email}</p>
             </div>
           </div>
           <button
             onClick={handleSignOut}
-            className="flex items-center gap-3 px-3 py-2 rounded-lg text-foreground-muted hover:bg-background-tertiary hover:text-foreground transition-colors w-full"
+            className="text-foreground-muted hover:bg-background-tertiary hover:text-foreground flex w-full items-center gap-3 rounded-lg px-3 py-2 transition-colors"
           >
-            <LogOut className="w-5 h-5" />
+            <LogOut className="h-5 w-5" />
             <span className="font-medium">Sign Out</span>
           </button>
         </div>
@@ -219,10 +230,10 @@ export default function CalendarClient({
 
       {/* Main content */}
       <main className="flex-1 overflow-auto">
-        <header className="h-16 border-b border-border flex items-center justify-between px-6">
+        <header className="border-border flex h-16 items-center justify-between border-b px-6">
           <div>
-            <h1 className="text-xl font-semibold text-foreground">Content Calendar</h1>
-            <p className="text-sm text-foreground-muted">
+            <h1 className="text-foreground text-xl font-semibold">Content Calendar</h1>
+            <p className="text-foreground-muted text-sm">
               Schedule and manage your content publishing
             </p>
           </div>
@@ -230,40 +241,37 @@ export default function CalendarClient({
 
         <div className="p-6">
           {/* Calendar Header */}
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold text-foreground">
+          <div className="mb-6 flex items-center justify-between">
+            <h2 className="text-foreground text-2xl font-bold">
               {MONTHS[currentDate.getMonth()]} {currentDate.getFullYear()}
             </h2>
             <div className="flex items-center gap-2">
               <button
                 onClick={handlePrevMonth}
-                className="p-2 rounded-lg hover:bg-background-tertiary text-foreground-muted hover:text-foreground transition-colors"
+                className="hover:bg-background-tertiary text-foreground-muted hover:text-foreground rounded-lg p-2 transition-colors"
               >
-                <ChevronLeft className="w-5 h-5" />
+                <ChevronLeft className="h-5 w-5" />
               </button>
-              <button
-                onClick={() => setCurrentDate(new Date())}
-                className="btn-secondary text-sm"
-              >
+              <button onClick={() => setCurrentDate(new Date())} className="btn-secondary text-sm">
                 Today
               </button>
               <button
                 onClick={handleNextMonth}
-                className="p-2 rounded-lg hover:bg-background-tertiary text-foreground-muted hover:text-foreground transition-colors"
+                className="hover:bg-background-tertiary text-foreground-muted hover:text-foreground rounded-lg p-2 transition-colors"
               >
-                <ChevronRight className="w-5 h-5" />
+                <ChevronRight className="h-5 w-5" />
               </button>
             </div>
           </div>
 
           {/* Calendar Grid */}
-          <div className="card p-0 overflow-hidden">
+          <div className="card overflow-hidden p-0">
             {/* Day Headers */}
-            <div className="grid grid-cols-7 border-b border-border">
+            <div className="border-border grid grid-cols-7 border-b">
               {DAYS.map((day) => (
                 <div
                   key={day}
-                  className="p-3 text-center text-sm font-medium text-foreground-muted border-r border-border last:border-r-0"
+                  className="text-foreground-muted border-border border-r p-3 text-center text-sm font-medium last:border-r-0"
                 >
                   {day}
                 </div>
@@ -283,18 +291,18 @@ export default function CalendarClient({
                 return (
                   <div
                     key={index}
-                    className={`min-h-[120px] p-2 border-r border-b border-border last:border-r-0 ${
-                      date ? 'hover:bg-background-tertiary cursor-pointer' : 'bg-background-secondary'
+                    className={`border-border min-h-[120px] border-b border-r p-2 last:border-r-0 ${
+                      date
+                        ? 'hover:bg-background-tertiary cursor-pointer'
+                        : 'bg-background-secondary'
                     }`}
                     onClick={() => date && handleDateClick(date)}
                   >
                     {date && (
                       <>
                         <div
-                          className={`w-7 h-7 rounded-full flex items-center justify-center text-sm mb-1 ${
-                            isToday
-                              ? 'bg-primary text-white font-bold'
-                              : 'text-foreground'
+                          className={`mb-1 flex h-7 w-7 items-center justify-center rounded-full text-sm ${
+                            isToday ? 'bg-primary font-bold text-white' : 'text-foreground'
                           }`}
                         >
                           {date.getDate()}
@@ -306,12 +314,12 @@ export default function CalendarClient({
                             return (
                               <div
                                 key={item.id}
-                                className={`flex items-center gap-1 px-1.5 py-0.5 rounded text-xs ${config?.color || 'bg-gray-500'} text-white`}
+                                className={`flex items-center gap-1 rounded px-1.5 py-0.5 text-xs ${config?.color || 'bg-gray-500'} text-white`}
                                 onClick={(e) => {
                                   e.stopPropagation();
                                 }}
                               >
-                                <Icon className="w-3 h-3" />
+                                <Icon className="h-3 w-3" />
                                 <span className="truncate">
                                   {new Date(item.scheduled_at).toLocaleTimeString('en-US', {
                                     hour: 'numeric',
@@ -323,15 +331,15 @@ export default function CalendarClient({
                                     e.stopPropagation();
                                     handleRemoveScheduled(item.id);
                                   }}
-                                  className="ml-auto hover:bg-white/20 rounded p-0.5"
+                                  className="ml-auto rounded p-0.5 hover:bg-white/20"
                                 >
-                                  <X className="w-3 h-3" />
+                                  <X className="h-3 w-3" />
                                 </button>
                               </div>
                             );
                           })}
                           {scheduled.length > 3 && (
-                            <div className="text-xs text-foreground-muted">
+                            <div className="text-foreground-muted text-xs">
                               +{scheduled.length - 3} more
                             </div>
                           )}
@@ -349,12 +357,15 @@ export default function CalendarClient({
       {/* Schedule Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
-          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setIsModalOpen(false)} />
-          <div className="relative w-full max-w-md bg-background-secondary rounded-2xl border border-border shadow-2xl m-4">
-            <div className="flex items-center justify-between p-6 border-b border-border">
+          <div
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            onClick={() => setIsModalOpen(false)}
+          />
+          <div className="bg-background-secondary border-border relative m-4 w-full max-w-md rounded-2xl border shadow-2xl">
+            <div className="border-border flex items-center justify-between border-b p-6">
               <div>
-                <h2 className="text-xl font-semibold text-foreground">Schedule Content</h2>
-                <p className="text-sm text-foreground-muted">
+                <h2 className="text-foreground text-xl font-semibold">Schedule Content</h2>
+                <p className="text-foreground-muted text-sm">
                   {selectedDate?.toLocaleDateString('en-US', {
                     weekday: 'long',
                     month: 'long',
@@ -364,15 +375,15 @@ export default function CalendarClient({
               </div>
               <button
                 onClick={() => setIsModalOpen(false)}
-                className="p-2 rounded-lg hover:bg-background-tertiary text-foreground-muted hover:text-foreground transition-colors"
+                className="hover:bg-background-tertiary text-foreground-muted hover:text-foreground rounded-lg p-2 transition-colors"
               >
-                <X className="w-5 h-5" />
+                <X className="h-5 w-5" />
               </button>
             </div>
 
-            <div className="p-6 space-y-4">
+            <div className="space-y-4 p-6">
               {availableContent.length === 0 ? (
-                <div className="text-center py-6">
+                <div className="py-6 text-center">
                   <p className="text-foreground-muted mb-3">No content available to schedule</p>
                   <a href="/dashboard/generate" className="btn-primary inline-flex">
                     Generate Content
@@ -411,16 +422,22 @@ export default function CalendarClient({
                             key={key}
                             type="button"
                             onClick={() => setSelectedPlatform(key)}
-                            className={`flex items-center gap-2 p-3 rounded-lg border transition-colors ${
+                            className={`flex items-center gap-2 rounded-lg border p-3 transition-colors ${
                               selectedPlatform === key
                                 ? 'border-primary bg-primary/10'
                                 : 'border-border hover:border-border-light'
                             }`}
                           >
-                            <div className={`w-6 h-6 rounded ${config.color} flex items-center justify-center`}>
-                              <Icon className="w-3 h-3 text-white" />
+                            <div
+                              className={`h-6 w-6 rounded ${config.color} flex items-center justify-center`}
+                            >
+                              <Icon className="h-3 w-3 text-white" />
                             </div>
-                            <span className={selectedPlatform === key ? 'text-primary' : 'text-foreground'}>
+                            <span
+                              className={
+                                selectedPlatform === key ? 'text-primary' : 'text-foreground'
+                              }
+                            >
                               {config.label}
                             </span>
                           </button>
@@ -433,7 +450,7 @@ export default function CalendarClient({
                   <div>
                     <label className="label">Time</label>
                     <div className="relative">
-                      <Clock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-foreground-muted" />
+                      <Clock className="text-foreground-muted absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2" />
                       <input
                         type="time"
                         value={selectedTime}
@@ -445,10 +462,7 @@ export default function CalendarClient({
 
                   {/* Actions */}
                   <div className="flex items-center justify-end gap-3 pt-4">
-                    <button
-                      onClick={() => setIsModalOpen(false)}
-                      className="btn-secondary"
-                    >
+                    <button onClick={() => setIsModalOpen(false)} className="btn-secondary">
                       Cancel
                     </button>
                     <button
@@ -456,7 +470,7 @@ export default function CalendarClient({
                       disabled={!selectedContent || !selectedPlatform}
                       className="btn-primary"
                     >
-                      <Plus className="w-4 h-4 mr-2" />
+                      <Plus className="mr-2 h-4 w-4" />
                       Schedule
                     </button>
                   </div>

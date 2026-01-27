@@ -1,13 +1,13 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import { z } from 'zod';
-import { supabase } from '../lib/supabase';
-import { openai } from '../lib/openai';
-import { authenticateUser, AuthenticatedRequest } from '../middleware/auth';
+import { supabase } from '../lib/supabase.js';
+import { openai } from '../lib/openai.js';
+import { authMiddleware, AuthenticatedRequest } from '../middleware/auth.js';
 
 const router = Router();
 
 // Apply authentication to all routes
-router.use(authenticateUser);
+router.use(authMiddleware);
 
 // Transcribe asset
 router.post('/:id/transcribe', async (req: Request, res: Response, next: NextFunction) => {
@@ -64,7 +64,6 @@ router.post('/:id/transcribe', async (req: Request, res: Response, next: NextFun
     }
 
     return res.json({ transcription });
-
   } catch (error) {
     next(error);
   }
@@ -167,7 +166,6 @@ Make the content engaging, shareable, and optimized for each platform.`,
     };
 
     return res.json({ content: formattedContent });
-
   } catch (error) {
     if (error instanceof z.ZodError) {
       return res.status(400).json({ error: 'Validation failed', details: error.errors });
@@ -193,7 +191,6 @@ router.get('/', async (req: Request, res: Response, next: NextFunction) => {
     }
 
     return res.json({ assets });
-
   } catch (error) {
     next(error);
   }
@@ -219,22 +216,16 @@ router.delete('/:id', async (req: Request, res: Response, next: NextFunction) =>
     }
 
     // Delete from storage
-    await supabase.storage
-      .from('media-assets')
-      .remove([asset.storage_path]);
+    await supabase.storage.from('media-assets').remove([asset.storage_path]);
 
     // Delete from database
-    const { error: deleteError } = await supabase
-      .from('media_assets')
-      .delete()
-      .eq('id', id);
+    const { error: deleteError } = await supabase.from('media_assets').delete().eq('id', id);
 
     if (deleteError) {
       return res.status(500).json({ error: 'Failed to delete asset' });
     }
 
     return res.json({ success: true });
-
   } catch (error) {
     next(error);
   }

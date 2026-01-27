@@ -58,11 +58,11 @@
 - [x] Edit interface for text and images
 - [x] Content history tracking
 
-### Phase 7: Content Calendar & Scheduling 📋
-- [ ] Visual calendar component
-- [ ] Drag-and-drop scheduling
-- [ ] Scheduled content storage
-- [ ] Optional: Buffer/LinkedIn API integration
+### Phase 7: Content Calendar & Scheduling ✅
+- [x] Visual calendar component
+- [x] Drag-and-drop scheduling
+- [x] Scheduled content storage
+- [x] Optional: Buffer/LinkedIn API integration
 
 ### Phase 8: Asset Transformation (Content Repurposing) 📋
 - [ ] Video upload to Supabase Storage

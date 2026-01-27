@@ -1,0 +1,31 @@
+{
+  "name": "postry-ai",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Multimodal Content Orchestrator - Transform articles into multi-platform social content",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "yarn workspaces foreach -p run dev",
+    "dev:frontend": "yarn workspace @postry/frontend dev",
+    "dev:backend": "yarn workspace @postry/backend dev",
+    "build": "yarn workspaces foreach -p run build",
+    "build:frontend": "yarn workspace @postry/frontend build",
+    "build:backend": "yarn workspace @postry/backend build",
+    "lint": "yarn workspaces foreach -p run lint",
+    "lint:fix": "yarn workspaces foreach -p run lint:fix",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md}\""
+  },
+  "devDependencies": {
+    "prettier": "^3.2.4",
+    "eslint": "^8.56.0",
+    "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "packageManager": "yarn@4.0.2"
+}

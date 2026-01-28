@@ -120,9 +120,9 @@ Brand Guidelines:
       }
     }
 
-    // Generate content with GPT-4
+    // Generate content with GPT-3.5
     const completion = await openai.chat.completions.create({
-      model: 'gpt-4-turbo-preview',
+      model: 'gpt-3.5-turbo',
       messages: [
         {
           role: 'system',

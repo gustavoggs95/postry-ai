@@ -68,15 +68,44 @@ router.post('/generate', async (req: AuthenticatedRequest, res: Response) => {
     }
 
     // Fetch brand configuration
+    // First check if brand exists at all
+    const { data: brandExists } = await supabase
+      .from('brands')
+      .select('id, user_id')
+      .eq('id', validatedData.brandId)
+      .maybeSingle();
+
+    console.log('Brand existence check:', {
+      requestedBrandId: validatedData.brandId,
+      currentUserId: req.user!.id,
+      foundBrand: brandExists,
+    });
+
     const { data: brand, error: brandError } = await supabase
       .from('brands')
       .select('*')
       .eq('id', validatedData.brandId)
       .eq('user_id', req.user!.id)
-      .single();
+      .maybeSingle();
 
     if (brandError || !brand) {
-      return res.status(404).json({ error: 'Brand not found' });
+      console.error('Brand lookup error:', {
+        brandId: validatedData.brandId,
+        userId: req.user!.id,
+        error: brandError,
+      });
+      return res.status(404).json({
+        error: brandExists ? 'Brand does not belong to this user' : 'Brand not found',
+        details:
+          process.env.NODE_ENV === 'development'
+            ? {
+                brandId: validatedData.brandId,
+                userId: req.user!.id,
+                brandOwnerId: brandExists?.user_id,
+                supabaseError: brandError?.message,
+              }
+            : undefined,
+      });
     }
 
     // Build the brand voice prompt
@@ -100,7 +129,7 @@ ${brand.keywords?.length ? `- Key topics/keywords: ${brand.keywords.join(', ')}`
       const prompt = getPromptForContentType(contentType, sourceContent, brandVoice);
 
       const completion = await openai.chat.completions.create({
-        model: 'gpt-4',
+        model: 'gpt-3.5-turbo',
         messages: [
           {
             role: 'system',

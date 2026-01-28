@@ -39,14 +39,6 @@ interface CalendarClientProps {
   availableContent: Content[];
 }
 
-const sidebarItems = [
-  { icon: LayoutDashboard, label: 'Dashboard', href: '/dashboard' },
-  { icon: Sparkles, label: 'Generate', href: '/dashboard/generate' },
-  { icon: Palette, label: 'Brand Presets', href: '/dashboard/brands' },
-  { icon: FileText, label: 'Content', href: '/dashboard/content' },
-  { icon: CalendarIcon, label: 'Calendar', href: '/dashboard/calendar', active: true },
-  { icon: Settings, label: 'Settings', href: '/dashboard/settings' },
-];
 
 const platformConfig: Record<string, { icon: typeof Linkedin; color: string; label: string }> = {
   linkedin: { icon: Linkedin, color: 'bg-blue-600', label: 'LinkedIn' },
@@ -175,62 +167,10 @@ export default function CalendarClient({
 
   const days = getDaysInMonth(currentDate);
   const today = new Date();
-  const userName = user.user_metadata?.full_name || user.email?.split('@')[0] || 'User';
 
   return (
-    <div className="bg-background flex min-h-screen">
-      {/* Sidebar */}
-      <aside className="bg-background-secondary border-border flex w-64 flex-col border-r">
-        <div className="border-border flex h-16 items-center gap-2 border-b px-4">
-          <div className="bg-gradient-primary flex h-10 w-10 items-center justify-center rounded-xl">
-            <Sparkles className="h-5 w-5 text-white" />
-          </div>
-          <span className="text-foreground text-xl font-bold">Postry AI</span>
-        </div>
-
-        <nav className="flex-1 p-4">
-          <ul className="space-y-2">
-            {sidebarItems.map((item) => (
-              <li key={item.label}>
-                <a
-                  href={item.href}
-                  className={`flex items-center gap-3 rounded-lg px-3 py-2.5 transition-colors ${
-                    item.active
-                      ? 'bg-primary/10 text-primary'
-                      : 'text-foreground-muted hover:bg-background-tertiary hover:text-foreground'
-                  }`}
-                >
-                  <item.icon className="h-5 w-5" />
-                  <span className="font-medium">{item.label}</span>
-                </a>
-              </li>
-            ))}
-          </ul>
-        </nav>
-
-        <div className="border-border border-t p-4">
-          <div className="mb-4 flex items-center gap-3">
-            <div className="bg-primary/20 flex h-10 w-10 items-center justify-center rounded-full">
-              <span className="text-primary font-medium">{userName.charAt(0).toUpperCase()}</span>
-            </div>
-            <div className="min-w-0 flex-1">
-              <p className="text-foreground truncate text-sm font-medium">{userName}</p>
-              <p className="text-foreground-muted truncate text-xs">{user.email}</p>
-            </div>
-          </div>
-          <button
-            onClick={handleSignOut}
-            className="text-foreground-muted hover:bg-background-tertiary hover:text-foreground flex w-full items-center gap-3 rounded-lg px-3 py-2 transition-colors"
-          >
-            <LogOut className="h-5 w-5" />
-            <span className="font-medium">Sign Out</span>
-          </button>
-        </div>
-      </aside>
-
-      {/* Main content */}
-      <main className="flex-1 overflow-auto">
-        <header className="border-border flex h-16 items-center justify-between border-b px-6">
+    <>
+      <header className="border-border flex h-16 items-center justify-between border-b px-6">
           <div>
             <h1 className="text-foreground text-xl font-semibold">Content Calendar</h1>
             <p className="text-foreground-muted text-sm">
@@ -352,10 +292,9 @@ export default function CalendarClient({
             </div>
           </div>
         </div>
-      </main>
 
-      {/* Schedule Modal */}
-      {isModalOpen && (
+        {/* Schedule Modal */}
+        {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           <div
             className="absolute inset-0 bg-black/60 backdrop-blur-sm"
@@ -480,6 +419,6 @@ export default function CalendarClient({
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 }

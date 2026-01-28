@@ -197,7 +197,7 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
           {/* Email form */}
           <form onSubmit={handleEmailAuth} className="space-y-4">
             <div>
-              <label htmlFor="email" className="mb-2 block text-sm font-medium text-gray-300">
+              <label htmlFor="email" className="label">
                 Email
               </label>
               <input
@@ -206,13 +206,13 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="bg-surface-light focus:border-primary focus:ring-primary/20 w-full rounded-lg border border-gray-700 px-4 py-2.5 text-white placeholder-gray-500 focus:outline-none focus:ring-2"
+                className="input"
                 placeholder="you@example.com"
               />
             </div>
 
             <div>
-              <label htmlFor="password" className="mb-2 block text-sm font-medium text-gray-300">
+              <label htmlFor="password" className="label">
                 Password
               </label>
               <input
@@ -222,7 +222,7 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 minLength={6}
-                className="bg-surface-light focus:border-primary focus:ring-primary/20 w-full rounded-lg border border-gray-700 px-4 py-2.5 text-white placeholder-gray-500 focus:outline-none focus:ring-2"
+                className="input"
                 placeholder="••••••••"
               />
             </div>

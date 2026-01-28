@@ -2,13 +2,18 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Sparkles, Mail, Lock, User, Chrome, Loader2, Check, X } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 
-export default function SignupPage() {
+export default function AuthPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const supabase = createClient();
+  
+  const [view, setView] = useState<'login' | 'signup'>(
+    searchParams.get('view') === 'signup' ? 'signup' : 'login'
+  );
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -16,32 +21,46 @@ export default function SignupPage() {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
 
-  const handleEmailSignup = async (e: React.FormEvent) => {
+  const handleEmailAuth = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
 
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: {
-          full_name: fullName,
-        },
-        emailRedirectTo: `${window.location.origin}/auth/callback`,
-      },
-    });
+    if (view === 'login') {
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
 
-    if (error) {
-      setError(error.message);
-      setLoading(false);
+      if (error) {
+        setError(error.message);
+        setLoading(false);
+      } else {
+        router.push('/dashboard');
+      }
     } else {
-      setSuccess(true);
-      setLoading(false);
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            full_name: fullName,
+          },
+          emailRedirectTo: `${window.location.origin}/auth/callback`,
+        },
+      });
+
+      if (error) {
+        setError(error.message);
+        setLoading(false);
+      } else {
+        setSuccess(true);
+        setLoading(false);
+      }
     }
   };
 
-  const handleGoogleSignup = async () => {
+  const handleGoogleAuth = async () => {
     setLoading(true);
     setError(null);
 
@@ -56,6 +75,14 @@ export default function SignupPage() {
       setError(error.message);
       setLoading(false);
     }
+  };
+
+  const toggleView = () => {
+    setView(view === 'login' ? 'signup' : 'login');
+    setError(null);
+    setFullName('');
+    setEmail('');
+    setPassword('');
   };
 
   if (success) {
@@ -78,9 +105,9 @@ export default function SignupPage() {
               We&apos;ve sent a confirmation link to <strong>{email}</strong>. Click the link to
               verify your account.
             </p>
-            <Link href="/login" className="btn-primary">
+            <button onClick={() => { setSuccess(false); setView('login'); }} className="btn-primary">
               Back to Login
-            </Link>
+            </button>
           </div>
         </div>
       </div>
@@ -107,9 +134,13 @@ export default function SignupPage() {
             <span className="text-foreground text-2xl font-bold">Postry AI</span>
           </div>
 
-          <h1 className="text-foreground mb-2 text-center text-2xl font-bold">Create an account</h1>
+          <h1 className="text-foreground mb-2 text-center text-2xl font-bold">
+            {view === 'login' ? 'Welcome back' : 'Create an account'}
+          </h1>
           <p className="text-foreground-muted mb-8 text-center">
-            Start creating amazing content with AI
+            {view === 'login' 
+              ? 'Sign in to your account to continue'
+              : 'Start creating amazing content with AI'}
           </p>
 
           {/* Error Message */}
@@ -119,9 +150,9 @@ export default function SignupPage() {
             </div>
           )}
 
-          {/* Google Signup */}
+          {/* Google Auth */}
           <button
-            onClick={handleGoogleSignup}
+            onClick={handleGoogleAuth}
             disabled={loading}
             className="btn-secondary mb-6 w-full"
           >
@@ -140,24 +171,26 @@ export default function SignupPage() {
           </div>
 
           {/* Email Form */}
-          <form onSubmit={handleEmailSignup} className="space-y-4">
-            <div>
-              <label htmlFor="fullName" className="label">
-                Full Name
-              </label>
-              <div className="relative">
-                <User className="text-foreground-muted absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2" />
-                <input
-                  id="fullName"
-                  type="text"
-                  value={fullName}
-                  onChange={(e) => setFullName(e.target.value)}
-                  placeholder="John Doe"
-                  className="input pl-10"
-                  required
-                />
+          <form onSubmit={handleEmailAuth} className="space-y-4">
+            {view === 'signup' && (
+              <div>
+                <label htmlFor="fullName" className="label">
+                  Full Name
+                </label>
+                <div className="relative">
+                  <User className="text-foreground-muted absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2" />
+                  <input
+                    id="fullName"
+                    type="text"
+                    value={fullName}
+                    onChange={(e) => setFullName(e.target.value)}
+                    placeholder="John Doe"
+                    className="input pl-10"
+                    required
+                  />
+                </div>
               </div>
-            </div>
+            )}
 
             <div>
               <label htmlFor="email" className="label">
@@ -194,41 +227,59 @@ export default function SignupPage() {
                   required
                 />
               </div>
-              <p className="text-foreground-muted mt-1 text-xs">
-                Must be at least 6 characters long
-              </p>
+              {view === 'signup' && (
+                <p className="text-foreground-muted mt-1 text-xs">
+                  Must be at least 6 characters long
+                </p>
+              )}
             </div>
+
+            {view === 'login' && (
+              <div className="flex items-center justify-end">
+                <Link
+                  href="/forgot-password"
+                  className="text-primary hover:text-primary-hover text-sm"
+                >
+                  Forgot password?
+                </Link>
+              </div>
+            )}
 
             <button type="submit" disabled={loading} className="btn-primary w-full">
               {loading ? (
                 <>
                   <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                  Creating account...
+                  {view === 'login' ? 'Signing in...' : 'Creating account...'}
                 </>
               ) : (
-                'Create Account'
+                view === 'login' ? 'Sign In' : 'Create Account'
               )}
             </button>
           </form>
 
-          {/* Terms */}
-          <p className="text-foreground-muted mt-6 text-center text-xs">
-            By signing up, you agree to our{' '}
-            <Link href="/terms" className="text-primary hover:text-primary-hover">
-              Terms of Service
-            </Link>{' '}
-            and{' '}
-            <Link href="/privacy" className="text-primary hover:text-primary-hover">
-              Privacy Policy
-            </Link>
-          </p>
+          {/* Terms (signup only) */}
+          {view === 'signup' && (
+            <p className="text-foreground-muted mt-6 text-center text-xs">
+              By signing up, you agree to our{' '}
+              <Link href="/terms" className="text-primary hover:text-primary-hover">
+                Terms of Service
+              </Link>{' '}
+              and{' '}
+              <Link href="/privacy" className="text-primary hover:text-primary-hover">
+                Privacy Policy
+              </Link>
+            </p>
+          )}
 
-          {/* Login Link */}
+          {/* Toggle view */}
           <p className="text-foreground-muted mt-6 text-center">
-            Already have an account?{' '}
-            <Link href="/login" className="text-primary hover:text-primary-hover font-medium">
-              Sign in
-            </Link>
+            {view === 'login' ? "Don't have an account? " : 'Already have an account? '}
+            <button
+              onClick={toggleView}
+              className="text-primary hover:text-primary-hover font-medium"
+            >
+              {view === 'login' ? 'Sign up' : 'Sign in'}
+            </button>
           </p>
         </div>
       </div>

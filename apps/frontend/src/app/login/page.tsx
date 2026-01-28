@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Sparkles, Mail, Lock, Chrome, ArrowLeft, Loader2 } from 'lucide-react';
+import { Sparkles, Mail, Lock, Chrome, Loader2, X } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 
 export default function LoginPage() {
@@ -50,35 +50,33 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-dark flex items-center justify-center p-4">
+    <div className="bg-gradient-dark flex min-h-screen items-center justify-center p-4">
       <div className="w-full max-w-md">
-        {/* Back to Home */}
-        <Link
-          href="/"
-          className="inline-flex items-center gap-2 text-foreground-muted hover:text-foreground mb-8 transition-colors"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          Back to Home
-        </Link>
-
         {/* Card */}
-        <div className="card">
+        <div className="card relative">
+          <Link
+            href="/"
+            aria-label="Close"
+            className="text-foreground-muted hover:text-foreground absolute right-4 top-4 transition-colors"
+          >
+            <X className="h-5 w-5" />
+          </Link>
           {/* Logo */}
-          <div className="flex items-center justify-center gap-2 mb-8">
-            <div className="w-10 h-10 rounded-xl bg-gradient-primary flex items-center justify-center">
-              <Sparkles className="w-6 h-6 text-white" />
+          <div className="mb-8 flex items-center justify-center gap-2">
+            <div className="bg-gradient-primary flex h-10 w-10 items-center justify-center rounded-xl">
+              <Sparkles className="h-6 w-6 text-white" />
             </div>
-            <span className="text-2xl font-bold text-foreground">Postry AI</span>
+            <span className="text-foreground text-2xl font-bold">Postry AI</span>
           </div>
 
-          <h1 className="text-2xl font-bold text-foreground text-center mb-2">Welcome back</h1>
-          <p className="text-foreground-muted text-center mb-8">
+          <h1 className="text-foreground mb-2 text-center text-2xl font-bold">Welcome back</h1>
+          <p className="text-foreground-muted mb-8 text-center">
             Sign in to your account to continue
           </p>
 
           {/* Error Message */}
           {error && (
-            <div className="bg-error/10 border border-error/20 text-error rounded-lg p-3 mb-6 text-sm">
+            <div className="bg-error/10 border-error/20 text-error mb-6 rounded-lg border p-3 text-sm">
               {error}
             </div>
           )}
@@ -87,19 +85,19 @@ export default function LoginPage() {
           <button
             onClick={handleGoogleLogin}
             disabled={loading}
-            className="btn-secondary w-full mb-6"
+            className="btn-secondary mb-6 w-full"
           >
-            <Chrome className="w-5 h-5 mr-2" />
+            <Chrome className="mr-2 h-5 w-5" />
             Continue with Google
           </button>
 
           {/* Divider */}
           <div className="relative mb-6">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-border" />
+              <div className="border-border w-full border-t" />
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-card text-foreground-muted">Or continue with email</span>
+              <span className="bg-card text-foreground-muted px-2">Or continue with email</span>
             </div>
           </div>
 
@@ -110,7 +108,7 @@ export default function LoginPage() {
                 Email
               </label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-foreground-muted" />
+                <Mail className="text-foreground-muted absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2" />
                 <input
                   id="email"
                   type="email"
@@ -128,7 +126,7 @@ export default function LoginPage() {
                 Password
               </label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-foreground-muted" />
+                <Lock className="text-foreground-muted absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2" />
                 <input
                   id="password"
                   type="password"
@@ -144,7 +142,7 @@ export default function LoginPage() {
             <div className="flex items-center justify-end">
               <Link
                 href="/forgot-password"
-                className="text-sm text-primary hover:text-primary-hover"
+                className="text-primary hover:text-primary-hover text-sm"
               >
                 Forgot password?
               </Link>
@@ -153,7 +151,7 @@ export default function LoginPage() {
             <button type="submit" disabled={loading} className="btn-primary w-full">
               {loading ? (
                 <>
-                  <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                  <Loader2 className="mr-2 h-5 w-5 animate-spin" />
                   Signing in...
                 </>
               ) : (
@@ -163,7 +161,7 @@ export default function LoginPage() {
           </form>
 
           {/* Sign Up Link */}
-          <p className="text-center text-foreground-muted mt-6">
+          <p className="text-foreground-muted mt-6 text-center">
             Don&apos;t have an account?{' '}
             <Link href="/signup" className="text-primary hover:text-primary-hover font-medium">
               Sign up

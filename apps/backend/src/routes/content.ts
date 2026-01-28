@@ -129,7 +129,7 @@ ${brand.keywords?.length ? `- Key topics/keywords: ${brand.keywords.join(', ')}`
         quality: 'standard',
       });
 
-      imageUrl = imageResponse.data[0]?.url;
+      imageUrl = imageResponse.data?.[0]?.url;
     }
 
     // Save to database

@@ -2,7 +2,7 @@
 
 import { useState, useRef } from 'react';
 import Link from 'next/link';
-import { createBrowserClient } from '@/lib/supabase/client';
+import { createClient } from '@/lib/supabase/client';
 
 interface MediaAsset {
   id: string;
@@ -29,7 +29,7 @@ interface AssetsClientProps {
 }
 
 export default function AssetsClient({ initialAssets, brands }: AssetsClientProps) {
-  const supabase = createBrowserClient();
+  const supabase = createClient();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [assets, setAssets] = useState<MediaAsset[]>(initialAssets);

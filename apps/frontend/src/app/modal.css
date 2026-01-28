@@ -1,0 +1,29 @@
+/* React Modal Styles */
+.ReactModal__Overlay {
+  opacity: 0;
+  transition: opacity 200ms ease-out;
+}
+
+.ReactModal__Overlay--after-open {
+  opacity: 1;
+}
+
+.ReactModal__Overlay--before-close {
+  opacity: 0;
+}
+
+.ReactModal__Content {
+  transform: scale(0.95) translateY(20px);
+  transition: all 200ms ease-out;
+  opacity: 0;
+}
+
+.ReactModal__Content--after-open {
+  transform: scale(1) translateY(0);
+  opacity: 1;
+}
+
+.ReactModal__Content--before-close {
+  transform: scale(0.95) translateY(20px);
+  opacity: 0;
+}

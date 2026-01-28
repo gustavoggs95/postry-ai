@@ -10,7 +10,6 @@ import {
   FileText,
   Calendar,
   Settings,
-  LogOut,
   Plus,
   Link as LinkIcon,
   Zap,
@@ -19,7 +18,7 @@ import {
   Clock,
   Video,
 } from 'lucide-react';
-import { createClient } from '@/lib/supabase/client';
+import UserDropdown from '@/components/UserDropdown';
 
 interface DashboardClientProps {
   user: User;
@@ -44,13 +43,7 @@ const stats = [
 
 export default function DashboardClient({ user }: DashboardClientProps) {
   const router = useRouter();
-  const supabase = createClient();
   const [sidebarOpen, setSidebarOpen] = useState(true);
-
-  const handleSignOut = async () => {
-    await supabase.auth.signOut();
-    router.push('/');
-  };
 
   const userName = user.user_metadata?.full_name || user.email?.split('@')[0] || 'User';
 
@@ -91,24 +84,7 @@ export default function DashboardClient({ user }: DashboardClientProps) {
 
         {/* User section */}
         <div className="border-border border-t p-4">
-          <div className="mb-4 flex items-center gap-3">
-            <div className="bg-primary/20 flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full">
-              <span className="text-primary font-medium">{userName.charAt(0).toUpperCase()}</span>
-            </div>
-            {sidebarOpen && (
-              <div className="min-w-0 flex-1">
-                <p className="text-foreground truncate text-sm font-medium">{userName}</p>
-                <p className="text-foreground-muted truncate text-xs">{user.email}</p>
-              </div>
-            )}
-          </div>
-          <button
-            onClick={handleSignOut}
-            className={`text-foreground-muted hover:bg-background-tertiary hover:text-foreground flex w-full items-center gap-3 rounded-lg px-3 py-2 transition-colors ${!sidebarOpen && 'justify-center'}`}
-          >
-            <LogOut className="h-5 w-5" />
-            {sidebarOpen && <span className="font-medium">Sign Out</span>}
-          </button>
+          <UserDropdown user={user} position="top" />
         </div>
       </aside>
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { User } from '@supabase/supabase-js';
 import {
@@ -19,6 +19,7 @@ import {
   Video,
 } from 'lucide-react';
 import UserDropdown from '@/components/UserDropdown';
+import { createClient } from '@/lib/supabase/client';
 
 interface DashboardClientProps {
   user: User;
@@ -41,9 +42,27 @@ const stats = [
   { label: 'Time Saved', value: '0h', icon: TrendingUp, trend: '+0%' },
 ];
 
-export default function DashboardClient({ user }: DashboardClientProps) {
+export default function DashboardClient({ user: initialUser }: DashboardClientProps) {
   const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [user, setUser] = useState<User>(initialUser);
+
+  useEffect(() => {
+    const supabase = createClient();
+
+    // Listen for auth state changes
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      if (session?.user) {
+        setUser(session.user);
+      } else if (event === 'SIGNED_OUT') {
+        router.push('/');
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, [router]);
 
   const userName = user.user_metadata?.full_name || user.email?.split('@')[0] || 'User';
 

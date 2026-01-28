@@ -38,8 +38,8 @@ export default function UserDropdown({ user, position = 'bottom' }: UserDropdown
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
-    router.push('/');
-    router.refresh();
+    // Force a full page reload to clear all client state
+    window.location.href = '/';
   };
 
   return (
@@ -61,7 +61,9 @@ export default function UserDropdown({ user, position = 'bottom' }: UserDropdown
       </button>
 
       {isOpen && (
-        <div className={`absolute right-0 w-56 rounded-lg border border-gray-800 bg-[#18181b] shadow-xl ${position === 'top' ? 'bottom-full mb-2' : 'mt-2'}`}>
+        <div
+          className={`absolute right-0 w-56 rounded-lg border border-gray-800 bg-[#18181b] shadow-xl ${position === 'top' ? 'bottom-full mb-2' : 'mt-2'}`}
+        >
           <div className="border-b border-gray-800 p-3">
             <p className="text-sm font-medium text-white">{userName}</p>
             <p className="text-xs text-gray-400">{userEmail}</p>

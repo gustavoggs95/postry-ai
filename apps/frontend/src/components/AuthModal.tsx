@@ -232,7 +232,7 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
               disabled={loading}
               className="from-primary to-accent w-full rounded-lg bg-gradient-to-r px-4 py-3 font-semibold text-white transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
             >
-              {loading ? 'Loading...' : view === 'login' ? 'Sign in' : 'Sign up'}
+              {loading ? 'Loading...' : view === 'login' ? 'Sign in' : 'Create Account'}
             </button>
           </form>
 
@@ -248,7 +248,7 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
               }}
               className="text-primary hover:text-primary/80 font-medium"
             >
-              {view === 'login' ? 'Sign up' : 'Sign in'}
+              {view === 'login' ? 'Create Account' : 'Sign in'}
             </button>
           </p>
         </div>

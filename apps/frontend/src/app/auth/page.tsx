@@ -10,7 +10,7 @@ export default function AuthPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const supabase = createClient();
-  
+
   const [view, setView] = useState<'login' | 'signup'>(
     searchParams.get('view') === 'signup' ? 'signup' : 'login'
   );
@@ -105,7 +105,13 @@ export default function AuthPage() {
               We&apos;ve sent a confirmation link to <strong>{email}</strong>. Click the link to
               verify your account.
             </p>
-            <button onClick={() => { setSuccess(false); setView('login'); }} className="btn-primary">
+            <button
+              onClick={() => {
+                setSuccess(false);
+                setView('login');
+              }}
+              className="btn-primary"
+            >
               Back to Login
             </button>
           </div>
@@ -138,7 +144,7 @@ export default function AuthPage() {
             {view === 'login' ? 'Welcome back' : 'Create an account'}
           </h1>
           <p className="text-foreground-muted mb-8 text-center">
-            {view === 'login' 
+            {view === 'login'
               ? 'Sign in to your account to continue'
               : 'Start creating amazing content with AI'}
           </p>
@@ -251,8 +257,10 @@ export default function AuthPage() {
                   <Loader2 className="mr-2 h-5 w-5 animate-spin" />
                   {view === 'login' ? 'Signing in...' : 'Creating account...'}
                 </>
+              ) : view === 'login' ? (
+                'Sign In'
               ) : (
-                view === 'login' ? 'Sign In' : 'Create Account'
+                'Create Account'
               )}
             </button>
           </form>
@@ -278,7 +286,7 @@ export default function AuthPage() {
               onClick={toggleView}
               className="text-primary hover:text-primary-hover font-medium"
             >
-              {view === 'login' ? 'Sign up' : 'Sign in'}
+              {view === 'login' ? 'Create Account' : 'Sign in'}
             </button>
           </p>
         </div>

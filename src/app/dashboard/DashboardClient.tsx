@@ -41,7 +41,7 @@ export default function DashboardClient({ user: initialUser }: DashboardClientPr
     const fetchContent = async () => {
       const { data } = await supabase
         .from('content')
-        .select('*')
+        .select('*, brands(name)')
         .order('created_at', { ascending: false })
         .limit(5);
 

@@ -39,7 +39,7 @@ export default function ContentCard({ content, onClick, menu }: ContentCardProps
   return (
     <div
       onClick={onClick}
-      className="card hover:border-primary/50 group relative cursor-pointer transition-all"
+      className="card group relative cursor-pointer transition-all hover:border-primary/50"
     >
       {menu}
 
@@ -53,8 +53,8 @@ export default function ContentCard({ content, onClick, menu }: ContentCardProps
           />
         </div>
       ) : (
-        <div className="bg-background-tertiary -mx-6 -mt-6 mb-4 flex h-32 items-center justify-center rounded-t-xl">
-          <FileText className="text-foreground-muted h-12 w-12" />
+        <div className="-mx-6 -mt-6 mb-4 flex h-32 items-center justify-center rounded-t-xl bg-background-tertiary">
+          <FileText className="h-12 w-12 text-foreground-muted" />
         </div>
       )}
 
@@ -69,7 +69,7 @@ export default function ContentCard({ content, onClick, menu }: ContentCardProps
           {statusConfig[status]?.label || 'Draft'}
         </span>
         {content.brands?.name && (
-          <span className="bg-primary/20 text-primary rounded-full px-2 py-1 text-xs font-medium">
+          <span className="rounded-full bg-primary/20 px-2 py-1 text-xs font-medium text-primary">
             {content.brands.name}
           </span>
         )}
@@ -78,11 +78,11 @@ export default function ContentCard({ content, onClick, menu }: ContentCardProps
       {/* Source */}
       <div className="mb-3">
         {content.source_url ? (
-          <p className="text-foreground truncate text-sm font-medium">
+          <p className="truncate text-sm font-medium text-foreground">
             {new URL(content.source_url).hostname}
           </p>
         ) : (
-          <p className="text-foreground line-clamp-2 text-sm">
+          <p className="line-clamp-2 text-sm text-foreground">
             {content.source_text?.substring(0, 100)}...
           </p>
         )}
@@ -95,17 +95,17 @@ export default function ContentCard({ content, onClick, menu }: ContentCardProps
           return (
             <div
               key={platform}
-              className="bg-background-tertiary flex h-6 w-6 items-center justify-center rounded"
+              className="flex h-6 w-6 items-center justify-center rounded bg-background-tertiary"
               title={platform}
             >
-              <Icon className="text-foreground-muted h-3 w-3" />
+              <Icon className="h-3 w-3 text-foreground-muted" />
             </div>
           );
         })}
       </div>
 
       {/* Date */}
-      <p className="text-foreground-muted text-xs">
+      <p className="text-xs text-foreground-muted">
         {new Date(content.created_at).toLocaleDateString()}
       </p>
     </div>

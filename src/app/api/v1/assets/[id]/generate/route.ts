@@ -8,6 +8,7 @@ import { openai } from '@/lib/openai';
 const generateSchema = z.object({
   brandId: z.string().uuid().optional(),
   formats: z.array(z.enum(['tweets', 'blog', 'reels'])).default(['tweets', 'blog', 'reels']),
+  model: z.enum(['gpt-5.1', 'gpt-5-mini', 'gpt-5-nano']).default('gpt-5-mini'),
 });
 
 // POST /api/v1/assets/:id/generate - Generate content from transcription
@@ -59,9 +60,12 @@ Brand Guidelines:
       }
     }
 
-    // Generate content with GPT-3.5
+    // Generate content with GPT-5
+    // gpt-5-mini and gpt-5-nano don't support temperature parameter
+    const supportsTemperature = validatedData.model === 'gpt-5.1';
+
     const completion = await openai.chat.completions.create({
-      model: 'gpt-3.5-turbo',
+      model: validatedData.model,
       messages: [
         {
           role: 'system',
@@ -92,7 +96,8 @@ Make the content engaging, shareable, and optimized for each platform.`,
         },
       ],
       response_format: { type: 'json_object' },
-      max_tokens: 2000,
+      ...(supportsTemperature && { temperature: 0.7 }),
+      max_completion_tokens: 2000,
     });
 
     const content = JSON.parse(completion.choices[0].message.content || '{}');

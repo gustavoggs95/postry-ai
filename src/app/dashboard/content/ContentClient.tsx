@@ -6,13 +6,13 @@ import {
   Plus,
   Search,
   Filter,
-  MoreVertical,
   Edit2,
   Trash2,
   ExternalLink,
   FileText,
   CheckCircle,
   Archive,
+  Pencil,
 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { useContentStore, Content, ContentStatus } from '@/lib/stores';
@@ -139,21 +139,24 @@ export default function ContentClient({ initialContent }: ContentClientProps) {
                 content={content}
                 onClick={() => router.push(`/dashboard/content/${content.id}`)}
                 menu={
-                  <div className="absolute right-4 top-4 z-10">
+                  <div className="absolute bottom-4 right-4 z-10">
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
                         setOpenMenuId(openMenuId === content.id ? null : content.id);
                       }}
-                      className="rounded-lg p-1 text-foreground-muted transition-colors hover:bg-background-tertiary hover:text-foreground"
+                      className="rounded-lg bg-black/40 p-2 text-foreground-muted transition-colors hover:bg-background-tertiary hover:text-foreground"
                     >
-                      <MoreVertical className="h-5 w-5" />
+                      <Pencil className="h-5 w-5" />
                     </button>
 
                     {openMenuId === content.id && (
                       <div className="absolute right-0 top-8 z-10 w-48 rounded-lg border border-border bg-background-secondary shadow-xl">
                         <button
-                          onClick={() => router.push(`/dashboard/content/${content.id}`)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            router.push(`/dashboard/content/${content.id}`);
+                          }}
                           className="flex w-full items-center gap-2 px-3 py-2 text-sm text-foreground transition-colors hover:bg-background-tertiary"
                         >
                           <Edit2 className="h-4 w-4" />
@@ -161,7 +164,10 @@ export default function ContentClient({ initialContent }: ContentClientProps) {
                         </button>
                         {content.status === 'draft' && (
                           <button
-                            onClick={() => handleStatusChange(content.id, 'approved')}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleStatusChange(content.id, 'approved');
+                            }}
                             className="flex w-full items-center gap-2 px-3 py-2 text-sm text-foreground transition-colors hover:bg-background-tertiary"
                           >
                             <CheckCircle className="h-4 w-4" />
@@ -170,7 +176,10 @@ export default function ContentClient({ initialContent }: ContentClientProps) {
                         )}
                         {content.status === 'approved' && (
                           <button
-                            onClick={() => handleStatusChange(content.id, 'published')}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleStatusChange(content.id, 'published');
+                            }}
                             className="flex w-full items-center gap-2 px-3 py-2 text-sm text-foreground transition-colors hover:bg-background-tertiary"
                           >
                             <ExternalLink className="h-4 w-4" />
@@ -178,14 +187,20 @@ export default function ContentClient({ initialContent }: ContentClientProps) {
                           </button>
                         )}
                         <button
-                          onClick={() => handleStatusChange(content.id, 'archived')}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleStatusChange(content.id, 'archived');
+                          }}
                           className="flex w-full items-center gap-2 px-3 py-2 text-sm text-foreground transition-colors hover:bg-background-tertiary"
                         >
                           <Archive className="h-4 w-4" />
                           Archive
                         </button>
                         <button
-                          onClick={() => handleDelete(content.id)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDelete(content.id);
+                          }}
                           className="flex w-full items-center gap-2 px-3 py-2 text-sm text-error transition-colors hover:bg-error/10"
                         >
                           <Trash2 className="h-4 w-4" />

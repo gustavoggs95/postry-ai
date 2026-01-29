@@ -162,12 +162,12 @@ export default function BrandModal({ isOpen, onClose, editingBrand, userId }: Br
       <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
 
       {/* Modal */}
-      <div className="relative w-full max-w-2xl max-h-[90vh] overflow-auto bg-background-secondary rounded-2xl border border-border shadow-2xl m-4">
+      <div className="relative m-4 max-h-[90vh] w-full max-w-2xl overflow-auto rounded-2xl border border-border bg-background-secondary shadow-2xl">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-border">
+        <div className="flex items-center justify-between border-b border-border p-6">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-primary flex items-center justify-center">
-              <Sparkles className="w-5 h-5 text-white" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-primary">
+              <Sparkles className="h-5 w-5 text-white" />
             </div>
             <div>
               <h2 className="text-xl font-semibold text-foreground">
@@ -180,16 +180,16 @@ export default function BrandModal({ isOpen, onClose, editingBrand, userId }: Br
           </div>
           <button
             onClick={onClose}
-            className="p-2 rounded-lg hover:bg-background-tertiary text-foreground-muted hover:text-foreground transition-colors"
+            className="rounded-lg p-2 text-foreground-muted transition-colors hover:bg-background-tertiary hover:text-foreground"
           >
-            <X className="w-5 h-5" />
+            <X className="h-5 w-5" />
           </button>
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="p-6 space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-6 p-6">
           {error && (
-            <div className="bg-error/10 border border-error/20 text-error rounded-lg p-3 text-sm">
+            <div className="rounded-lg border border-error/20 bg-error/10 p-3 text-sm text-error">
               {error}
             </div>
           )}
@@ -228,24 +228,24 @@ export default function BrandModal({ isOpen, onClose, editingBrand, userId }: Br
           {/* Tone Selection */}
           <div>
             <label className="label">Brand Tone *</label>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
               {toneOptions.map((option) => (
                 <button
                   key={option.value}
                   type="button"
                   onClick={() => setFormData({ ...formData, tone: option.value })}
-                  className={`p-3 rounded-lg border text-left transition-all ${
+                  className={`rounded-lg border p-3 text-left transition-all ${
                     formData.tone === option.value
                       ? 'border-primary bg-primary/10'
-                      : 'border-border hover:border-border-light bg-background'
+                      : 'border-border bg-background hover:border-border-light'
                   }`}
                 >
                   <p
-                    className={`font-medium text-sm ${formData.tone === option.value ? 'text-primary' : 'text-foreground'}`}
+                    className={`text-sm font-medium ${formData.tone === option.value ? 'text-primary' : 'text-foreground'}`}
                   >
                     {option.label}
                   </p>
-                  <p className="text-xs text-foreground-muted mt-0.5">{option.description}</p>
+                  <p className="mt-0.5 text-xs text-foreground-muted">{option.description}</p>
                 </button>
               ))}
             </div>
@@ -267,7 +267,7 @@ export default function BrandModal({ isOpen, onClose, editingBrand, userId }: Br
           </div>
 
           {/* Two Column Layout */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             {/* Industry */}
             <div>
               <label htmlFor="industry" className="label">
@@ -309,13 +309,13 @@ export default function BrandModal({ isOpen, onClose, editingBrand, userId }: Br
             <button
               type="button"
               onClick={() => setFormData({ ...formData, use_emojis: !formData.use_emojis })}
-              className={`w-12 h-6 rounded-full transition-colors relative ${
+              className={`relative h-6 w-12 rounded-full transition-colors ${
                 formData.use_emojis ? 'bg-primary' : 'bg-border'
               }`}
             >
               <span
-                className={`absolute top-1 w-4 h-4 rounded-full bg-white transition-transform ${
-                  formData.use_emojis ? 'translate-x-7' : 'translate-x-1'
+                className={`absolute top-1 h-4 w-4 rounded-full bg-white transition-transform ${
+                  formData.use_emojis ? 'translate-x-1' : '-translate-x-6'
                 }`}
               />
             </button>
@@ -328,7 +328,7 @@ export default function BrandModal({ isOpen, onClose, editingBrand, userId }: Br
           {/* Keywords */}
           <div>
             <label className="label">Keywords & Topics</label>
-            <div className="flex gap-2 mb-2">
+            <div className="mb-2 flex gap-2">
               <input
                 type="text"
                 value={keywordInput}
@@ -346,15 +346,15 @@ export default function BrandModal({ isOpen, onClose, editingBrand, userId }: Br
                 {formData.keywords.map((keyword) => (
                   <span
                     key={keyword}
-                    className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-background-tertiary text-sm text-foreground"
+                    className="inline-flex items-center gap-1 rounded-lg bg-background-tertiary px-2 py-1 text-sm text-foreground"
                   >
                     {keyword}
                     <button
                       type="button"
                       onClick={() => handleRemoveKeyword(keyword)}
-                      className="hover:text-error transition-colors"
+                      className="transition-colors hover:text-error"
                     >
-                      <X className="w-3 h-3" />
+                      <X className="h-3 w-3" />
                     </button>
                   </span>
                 ))}
@@ -363,14 +363,14 @@ export default function BrandModal({ isOpen, onClose, editingBrand, userId }: Br
           </div>
 
           {/* Actions */}
-          <div className="flex items-center justify-end gap-3 pt-4 border-t border-border">
+          <div className="flex items-center justify-end gap-3 border-t border-border pt-4">
             <button type="button" onClick={onClose} className="btn-secondary">
               Cancel
             </button>
             <button type="submit" disabled={isLoading || !formData.name} className="btn-primary">
               {isLoading ? (
                 <>
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   {editingBrand ? 'Updating...' : 'Creating...'}
                 </>
               ) : editingBrand ? (

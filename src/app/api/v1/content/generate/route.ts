@@ -11,6 +11,7 @@ const generateContentSchema = z.object({
   brandId: z.string().uuid(),
   contentTypes: z.array(z.enum(['linkedin', 'tiktok', 'twitter', 'instagram'])),
   generateImage: z.boolean().default(false),
+  model: z.enum(['gpt-5.1', 'gpt-5-mini', 'gpt-5-nano']).default('gpt-5-mini'),
 });
 
 // POST /api/v1/content/generate - Generate content from URL or text
@@ -85,8 +86,12 @@ ${brand.keywords?.length ? `- Key topics/keywords: ${brand.keywords.join(', ')}`
     for (const contentType of validatedData.contentTypes) {
       const prompt = getPromptForContentType(contentType, sourceContent, brandVoice);
 
+      // All GPT-5 models use max_completion_tokens
+      // gpt-5-mini and gpt-5-nano don't support temperature parameter
+      const supportsTemperature = validatedData.model === 'gpt-5.1';
+
       const completion = await openai.chat.completions.create({
-        model: 'gpt-3.5-turbo',
+        model: validatedData.model,
         messages: [
           {
             role: 'system',
@@ -97,8 +102,8 @@ ${brand.keywords?.length ? `- Key topics/keywords: ${brand.keywords.join(', ')}`
             content: prompt,
           },
         ],
-        temperature: 0.7,
-        max_tokens: 1000,
+        ...(supportsTemperature && { temperature: 0.7 }),
+        max_completion_tokens: 1000,
       });
 
       generatedContent[contentType] = completion.choices[0]?.message?.content || '';

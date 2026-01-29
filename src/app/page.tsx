@@ -159,13 +159,12 @@ export default function HomePage() {
               <div className="h-3 w-3 rounded-full bg-warning" />
               <div className="h-3 w-3 rounded-full bg-success" />
             </div>
-            <div className="flex min-h-[300px] items-center justify-center rounded-lg bg-background p-6">
-              <div className="text-center">
-                <div className="mx-auto mb-4 flex h-16 w-16 animate-pulse-glow items-center justify-center rounded-2xl bg-gradient-primary">
-                  <Sparkles className="h-8 w-8 text-white" />
-                </div>
-                <p className="text-foreground-muted">Interactive demo coming soon...</p>
-              </div>
+            <div className="overflow-hidden rounded-lg bg-background">
+              <img
+                src="/images/dashboard.png"
+                alt="Postry AI Dashboard Preview"
+                className="h-auto w-full"
+              />
             </div>
           </div>
         </div>

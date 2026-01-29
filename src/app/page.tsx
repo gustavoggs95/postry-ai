@@ -125,13 +125,22 @@ export default function HomePage() {
         {/* Animated Background Effects */}
         <div className="pointer-events-none absolute inset-0">
           {/* Gradient Orbs */}
-          <div className="absolute -left-40 top-0 h-[500px] w-[500px] animate-pulse-slow rounded-full bg-primary/60 opacity-60 blur-3xl" />
-          <div className="absolute -right-40 top-20 h-[600px] w-[600px] animate-pulse-slower rounded-full bg-purple-500/60 opacity-60 blur-3xl" />
-          <div className="absolute left-1/2 top-1/3 h-[400px] w-[400px] -translate-x-1/2 animate-float rounded-full bg-blue-500/50 opacity-70 blur-3xl" />
-          <div className="absolute left-1/4 top-1/2 h-[350px] w-[350px] animate-pulse-slow rounded-full bg-pink-500/50 opacity-50 blur-3xl" style={{ animationDelay: '2s' }} />
-          <div className="absolute right-1/4 top-2/3 h-[450px] w-[450px] animate-pulse-slower rounded-full bg-cyan-500/50 opacity-50 blur-3xl" style={{ animationDelay: '4s' }} />
-          <div className="absolute left-3/4 top-10 h-[300px] w-[300px] animate-float rounded-full bg-indigo-500/40 opacity-50 blur-3xl" style={{ animationDelay: '1s' }} />
-          
+          <div className="animate-pulse-slow absolute -left-40 top-0 h-[500px] w-[500px] rounded-full bg-primary/60 opacity-60 blur-3xl" />
+          <div className="animate-pulse-slower absolute -right-40 top-20 h-[600px] w-[600px] rounded-full bg-purple-500/60 opacity-60 blur-3xl" />
+          <div className="animate-float absolute left-1/2 top-1/3 h-[400px] w-[400px] -translate-x-1/2 rounded-full bg-blue-500/50 opacity-70 blur-3xl" />
+          <div
+            className="animate-pulse-slow absolute left-1/4 top-1/2 h-[350px] w-[350px] rounded-full bg-pink-500/50 opacity-50 blur-3xl"
+            style={{ animationDelay: '2s' }}
+          />
+          <div
+            className="animate-pulse-slower absolute right-1/4 top-2/3 h-[450px] w-[450px] rounded-full bg-cyan-500/50 opacity-50 blur-3xl"
+            style={{ animationDelay: '4s' }}
+          />
+          <div
+            className="animate-float absolute left-3/4 top-10 h-[300px] w-[300px] rounded-full bg-indigo-500/40 opacity-50 blur-3xl"
+            style={{ animationDelay: '1s' }}
+          />
+
           {/* Grid Pattern */}
           <div className="absolute inset-0 bg-[linear-gradient(rgba(139,92,246,0.12)_1px,transparent_1px),linear-gradient(90deg,rgba(139,92,246,0.12)_1px,transparent_1px)] bg-[size:64px_64px] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_50%,black,transparent)]" />
         </div>

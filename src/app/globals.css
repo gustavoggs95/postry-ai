@@ -14,7 +14,9 @@
 
   body {
     @apply bg-background text-foreground antialiased;
-    font-feature-settings: 'rlig' 1, 'calt' 1;
+    font-feature-settings:
+      'rlig' 1,
+      'calt' 1;
   }
 
   /* Custom scrollbar */
@@ -28,7 +30,7 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply bg-border-light rounded-full;
+    @apply rounded-full bg-border-light;
   }
 
   ::-webkit-scrollbar-thumb:hover {
@@ -38,7 +40,7 @@
 
 @layer components {
   .btn {
-    @apply inline-flex items-center justify-center rounded-lg px-4 py-2 text-sm font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply inline-flex items-center justify-center rounded-lg px-4 py-2 text-sm font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50;
   }
 
   .btn-primary {
@@ -46,7 +48,7 @@
   }
 
   .btn-secondary {
-    @apply btn bg-background-tertiary text-foreground border border-border hover:bg-card-hover hover:border-border-light;
+    @apply btn border border-border bg-background-tertiary text-foreground hover:border-border-light hover:bg-card-hover;
   }
 
   .btn-ghost {
@@ -54,15 +56,15 @@
   }
 
   .card {
-    @apply bg-card rounded-xl border border-border p-6 transition-all duration-200 hover:border-border-light;
+    @apply rounded-xl border border-border bg-card p-6 transition-all duration-200 hover:border-border-light;
   }
 
   .input {
-    @apply w-full rounded-lg bg-background-secondary border border-border px-4 py-2.5 text-foreground placeholder:text-foreground-muted focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200;
+    @apply w-full rounded-lg border border-border bg-background-secondary px-4 py-2.5 text-foreground transition-all duration-200 placeholder:text-foreground-muted focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary;
   }
 
   .label {
-    @apply text-sm font-medium text-foreground-muted mb-1.5 block;
+    @apply mb-1.5 block text-sm font-medium text-foreground-muted;
   }
 
   .gradient-text {
@@ -70,7 +72,7 @@
   }
 
   .glass {
-    @apply bg-background-secondary/80 backdrop-blur-xl border border-border/50;
+    @apply border border-border/50 bg-background-secondary/80 backdrop-blur-xl;
   }
 }
 
@@ -84,7 +86,8 @@
   }
 
   @keyframes pulse-slow {
-    0%, 100% {
+    0%,
+    100% {
       opacity: 0.2;
       transform: scale(1);
     }
@@ -95,7 +98,8 @@
   }
 
   @keyframes pulse-slower {
-    0%, 100% {
+    0%,
+    100% {
       opacity: 0.2;
       transform: scale(1);
     }
@@ -106,7 +110,8 @@
   }
 
   @keyframes float {
-    0%, 100% {
+    0%,
+    100% {
       transform: translate(-50%, 0) scale(1);
     }
     50% {

@@ -295,7 +295,13 @@ function AuthPageContent() {
 
 export default function AuthPage() {
   return (
-    <Suspense fallback={<div className="bg-gradient-dark flex min-h-screen items-center justify-center"><div className="text-foreground">Loading...</div></div>}>
+    <Suspense
+      fallback={
+        <div className="flex min-h-screen items-center justify-center bg-gradient-dark">
+          <div className="text-foreground">Loading...</div>
+        </div>
+      }
+    >
       <AuthPageContent />
     </Suspense>
   );

@@ -43,7 +43,7 @@ export default function DashboardClient({ user: initialUser }: DashboardClientPr
         .from('content')
         .select('*, brands(name)')
         .order('created_at', { ascending: false })
-        .limit(5);
+        .limit(6);
 
       setRecentContent(data || []);
       setLoading(false);

@@ -10,7 +10,6 @@ import {
   ChevronRight,
   TrendingUp,
   Clock,
-  Video,
   FileText,
   Palette,
 } from 'lucide-react';
@@ -71,10 +70,10 @@ export default function DashboardClient({ user: initialUser }: DashboardClientPr
   return (
     <>
       {/* Header */}
-      <header className="border-border flex h-16 items-center justify-between border-b px-6">
+      <header className="flex h-16 items-center justify-between border-b border-border px-6">
         <div>
-          <h1 className="text-foreground text-xl font-semibold">Dashboard</h1>
-          <p className="text-foreground-muted text-sm">Welcome back, {userName}!</p>
+          <h1 className="text-xl font-semibold text-foreground">Dashboard</h1>
+          <p className="text-sm text-foreground-muted">Welcome back, {userName}!</p>
         </div>
         <button className="btn-primary">
           <Plus className="mr-2 h-4 w-4" />
@@ -90,73 +89,73 @@ export default function DashboardClient({ user: initialUser }: DashboardClientPr
             <div key={stat.label} className="card">
               <div className="flex items-start justify-between">
                 <div>
-                  <p className="text-foreground-muted text-sm">{stat.label}</p>
-                  <p className="text-foreground mt-1 text-3xl font-bold">{stat.value}</p>
+                  <p className="text-sm text-foreground-muted">{stat.label}</p>
+                  <p className="mt-1 text-3xl font-bold text-foreground">{stat.value}</p>
                 </div>
-                <div className="bg-primary/10 flex h-10 w-10 items-center justify-center rounded-lg">
-                  <stat.icon className="text-primary h-5 w-5" />
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+                  <stat.icon className="h-5 w-5 text-primary" />
                 </div>
               </div>
-              <p className="text-success mt-2 text-xs">{stat.trend} from last month</p>
+              <p className="mt-2 text-xs text-success">{stat.trend} from last month</p>
             </div>
           ))}
         </div>
 
         {/* Quick Actions */}
         <div className="mb-8">
-          <h2 className="text-foreground mb-4 text-lg font-semibold">Quick Actions</h2>
+          <h2 className="mb-4 text-lg font-semibold text-foreground">Quick Actions</h2>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
             {/* Generate from URL */}
-            <div className="card hover:border-primary/50 group cursor-pointer">
+            <div className="card group cursor-pointer hover:border-primary/50">
               <div className="flex items-center gap-4">
-                <div className="bg-gradient-primary flex h-12 w-12 items-center justify-center rounded-xl">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-primary">
                   <LinkIcon className="h-6 w-6 text-white" />
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-foreground group-hover:text-primary font-semibold transition-colors">
+                  <h3 className="font-semibold text-foreground transition-colors group-hover:text-primary">
                     Generate from URL
                   </h3>
-                  <p className="text-foreground-muted text-sm">
+                  <p className="text-sm text-foreground-muted">
                     Paste a blog article URL to generate content
                   </p>
                 </div>
-                <ChevronRight className="text-foreground-muted group-hover:text-primary h-5 w-5 transition-colors" />
+                <ChevronRight className="h-5 w-5 text-foreground-muted transition-colors group-hover:text-primary" />
               </div>
             </div>
 
             {/* Create Brand */}
-            <div className="card hover:border-primary/50 group cursor-pointer">
+            <div className="card group cursor-pointer hover:border-primary/50">
               <div className="flex items-center gap-4">
-                <div className="bg-accent/20 flex h-12 w-12 items-center justify-center rounded-xl">
-                  <Palette className="text-accent h-6 w-6" />
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-accent/20">
+                  <Palette className="h-6 w-6 text-accent" />
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-foreground group-hover:text-primary font-semibold transition-colors">
+                  <h3 className="font-semibold text-foreground transition-colors group-hover:text-primary">
                     Create Brand Preset
                   </h3>
-                  <p className="text-foreground-muted text-sm">
+                  <p className="text-sm text-foreground-muted">
                     Save your brand voice for consistent content
                   </p>
                 </div>
-                <ChevronRight className="text-foreground-muted group-hover:text-primary h-5 w-5 transition-colors" />
+                <ChevronRight className="h-5 w-5 text-foreground-muted transition-colors group-hover:text-primary" />
               </div>
             </div>
 
             {/* Transform Video */}
-            <div className="card hover:border-primary/50 group cursor-pointer">
+            <div className="card group cursor-pointer hover:border-primary/50">
               <div className="flex items-center gap-4">
-                <div className="bg-success/20 flex h-12 w-12 items-center justify-center rounded-xl">
-                  <Zap className="text-success h-6 w-6" />
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-success/20">
+                  <Zap className="h-6 w-6 text-success" />
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-foreground group-hover:text-primary font-semibold transition-colors">
+                  <h3 className="font-semibold text-foreground transition-colors group-hover:text-primary">
                     Transform Video
                   </h3>
-                  <p className="text-foreground-muted text-sm">
+                  <p className="text-sm text-foreground-muted">
                     Upload a video to repurpose into multiple formats
                   </p>
                 </div>
-                <ChevronRight className="text-foreground-muted group-hover:text-primary h-5 w-5 transition-colors" />
+                <ChevronRight className="h-5 w-5 text-foreground-muted transition-colors group-hover:text-primary" />
               </div>
             </div>
           </div>
@@ -164,7 +163,7 @@ export default function DashboardClient({ user: initialUser }: DashboardClientPr
 
         {/* Recent Content */}
         <div>
-          <h2 className="text-foreground mb-4 text-lg font-semibold">Recent Content</h2>
+          <h2 className="mb-4 text-lg font-semibold text-foreground">Recent Content</h2>
           {loading ? (
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
               {[...Array(3)].map((_, i) => (
@@ -173,11 +172,11 @@ export default function DashboardClient({ user: initialUser }: DashboardClientPr
             </div>
           ) : recentContent.length === 0 ? (
             <div className="card py-12 text-center">
-              <div className="bg-background-tertiary mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl">
-                <FileText className="text-foreground-muted h-8 w-8" />
+              <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-background-tertiary">
+                <FileText className="h-8 w-8 text-foreground-muted" />
               </div>
-              <h3 className="text-foreground mb-2 text-lg font-medium">No content yet</h3>
-              <p className="text-foreground-muted mb-4">
+              <h3 className="mb-2 text-lg font-medium text-foreground">No content yet</h3>
+              <p className="mb-4 text-foreground-muted">
                 Start by generating content from a URL or creating a brand preset
               </p>
               <button onClick={() => router.push('/dashboard/generate')} className="btn-primary">

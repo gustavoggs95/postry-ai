@@ -7,7 +7,6 @@ import AuthModal from '@/components/AuthModal';
 import UserDropdown from '@/components/UserDropdown';
 import { createClient } from '@/lib/supabase/client';
 import { User } from '@supabase/supabase-js';
-import { useRouter } from 'next/navigation';
 
 const features = [
   {
@@ -59,7 +58,6 @@ export default function HomePage() {
   const [authView, setAuthView] = useState<'login' | 'signup'>('login');
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-  const router = useRouter();
   const supabase = createClient();
 
   useEffect(() => {
@@ -88,16 +86,16 @@ export default function HomePage() {
   };
 
   return (
-    <div className="bg-gradient-dark min-h-screen">
+    <div className="min-h-screen bg-gradient-dark">
       {/* Navigation */}
       <nav className="glass fixed left-0 right-0 top-0 z-50">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className="bg-gradient-primary flex h-8 w-8 items-center justify-center rounded-lg">
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-primary">
                 <Sparkles className="h-5 w-5 text-white" />
               </div>
-              <span className="text-foreground text-xl font-bold">Postry AI</span>
+              <span className="text-xl font-bold text-foreground">Postry AI</span>
             </div>
             <div className="flex items-center gap-4">
               {loading ? (
@@ -127,15 +125,15 @@ export default function HomePage() {
       {/* Hero Section */}
       <section className="px-4 pb-20 pt-32">
         <div className="mx-auto max-w-7xl text-center">
-          <div className="bg-primary/10 border-primary/20 mb-6 inline-flex items-center gap-2 rounded-full border px-4 py-2">
-            <Sparkles className="text-primary h-4 w-4" />
-            <span className="text-primary text-sm">Automated Content Factory</span>
+          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-2">
+            <Sparkles className="h-4 w-4 text-primary" />
+            <span className="text-sm text-primary">Automated Content Factory</span>
           </div>
-          <h1 className="text-foreground mb-6 text-5xl font-bold tracking-tight sm:text-6xl lg:text-7xl">
+          <h1 className="mb-6 text-5xl font-bold tracking-tight text-foreground sm:text-6xl lg:text-7xl">
             Transform Content Into
             <span className="gradient-text mt-2 block">Multi-Platform Magic</span>
           </h1>
-          <p className="text-foreground-muted mx-auto mb-10 max-w-2xl text-xl">
+          <p className="mx-auto mb-10 max-w-2xl text-xl text-foreground-muted">
             Paste a blog URL and let AI generate LinkedIn posts, TikTok scripts, and cover images.
             All with your brand voice, automatically.
           </p>
@@ -157,15 +155,15 @@ export default function HomePage() {
       {/* Demo Preview */}
       <section className="px-4 py-12">
         <div className="mx-auto max-w-5xl">
-          <div className="card bg-background-secondary border-border-light overflow-hidden">
+          <div className="card overflow-hidden border-border-light bg-background-secondary">
             <div className="mb-4 flex items-center gap-2">
-              <div className="bg-error h-3 w-3 rounded-full" />
-              <div className="bg-warning h-3 w-3 rounded-full" />
-              <div className="bg-success h-3 w-3 rounded-full" />
+              <div className="h-3 w-3 rounded-full bg-error" />
+              <div className="h-3 w-3 rounded-full bg-warning" />
+              <div className="h-3 w-3 rounded-full bg-success" />
             </div>
-            <div className="bg-background flex min-h-[300px] items-center justify-center rounded-lg p-6">
+            <div className="flex min-h-[300px] items-center justify-center rounded-lg bg-background p-6">
               <div className="text-center">
-                <div className="bg-gradient-primary animate-pulse-glow mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl">
+                <div className="mx-auto mb-4 flex h-16 w-16 animate-pulse-glow items-center justify-center rounded-2xl bg-gradient-primary">
                   <Sparkles className="h-8 w-8 text-white" />
                 </div>
                 <p className="text-foreground-muted">Interactive demo coming soon...</p>
@@ -179,10 +177,10 @@ export default function HomePage() {
       <section className="bg-background-secondary px-4 py-20">
         <div className="mx-auto max-w-7xl">
           <div className="mb-12 text-center">
-            <h2 className="text-foreground mb-4 text-3xl font-bold sm:text-4xl">
+            <h2 className="mb-4 text-3xl font-bold text-foreground sm:text-4xl">
               Why Postry AI vs. ChatGPT?
             </h2>
-            <p className="text-foreground-muted mx-auto max-w-2xl">
+            <p className="mx-auto max-w-2xl text-foreground-muted">
               Stop copy-pasting between chats. Get a purpose-built content factory.
             </p>
           </div>
@@ -190,10 +188,10 @@ export default function HomePage() {
             {benefits.map((benefit, index) => (
               <div
                 key={index}
-                className="bg-background border-border flex items-center gap-3 rounded-lg border p-4"
+                className="flex items-center gap-3 rounded-lg border border-border bg-background p-4"
               >
-                <div className="bg-success/20 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full">
-                  <Check className="text-success h-4 w-4" />
+                <div className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-success/20">
+                  <Check className="h-4 w-4 text-success" />
                 </div>
                 <span className="text-foreground">{benefit}</span>
               </div>
@@ -206,20 +204,20 @@ export default function HomePage() {
       <section id="features" className="px-4 py-20">
         <div className="mx-auto max-w-7xl">
           <div className="mb-16 text-center">
-            <h2 className="text-foreground mb-4 text-3xl font-bold sm:text-4xl">
+            <h2 className="mb-4 text-3xl font-bold text-foreground sm:text-4xl">
               Everything You Need to Scale Content
             </h2>
-            <p className="text-foreground-muted mx-auto max-w-2xl">
+            <p className="mx-auto max-w-2xl text-foreground-muted">
               From idea to published post, all in one workflow.
             </p>
           </div>
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {features.map((feature, index) => (
               <div key={index} className="card group">
-                <div className="bg-primary/10 group-hover:bg-primary/20 mb-4 flex h-12 w-12 items-center justify-center rounded-xl transition-colors">
-                  <feature.icon className="text-primary h-6 w-6" />
+                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 transition-colors group-hover:bg-primary/20">
+                  <feature.icon className="h-6 w-6 text-primary" />
                 </div>
-                <h3 className="text-foreground mb-2 text-xl font-semibold">{feature.title}</h3>
+                <h3 className="mb-2 text-xl font-semibold text-foreground">{feature.title}</h3>
                 <p className="text-foreground-muted">{feature.description}</p>
               </div>
             ))}
@@ -239,7 +237,7 @@ export default function HomePage() {
             </p>
             <button
               onClick={() => openAuthModal('signup')}
-              className="text-primary inline-flex items-center justify-center rounded-lg bg-white px-8 py-3 font-semibold transition-colors hover:bg-white/90"
+              className="inline-flex items-center justify-center rounded-lg bg-white px-8 py-3 font-semibold text-primary transition-colors hover:bg-white/90"
             >
               Get Started Free
               <ArrowRight className="ml-2 h-5 w-5" />
@@ -249,16 +247,16 @@ export default function HomePage() {
       </section>
 
       {/* Footer */}
-      <footer className="border-border border-t px-4 py-12">
+      <footer className="border-t border-border px-4 py-12">
         <div className="mx-auto max-w-7xl">
           <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
             <div className="flex items-center gap-2">
-              <div className="bg-gradient-primary flex h-8 w-8 items-center justify-center rounded-lg">
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-primary">
                 <Sparkles className="h-5 w-5 text-white" />
               </div>
-              <span className="text-foreground text-lg font-bold">Postry AI</span>
+              <span className="text-lg font-bold text-foreground">Postry AI</span>
             </div>
-            <p className="text-foreground-muted text-sm">© 2026 Postry AI. All rights reserved.</p>
+            <p className="text-sm text-foreground-muted">© 2026 Postry AI. All rights reserved.</p>
           </div>
         </div>
       </footer>

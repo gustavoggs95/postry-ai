@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { User } from '@supabase/supabase-js';
 import {
   Plus,
   Search,
@@ -10,9 +9,6 @@ import {
   MoreVertical,
   Edit2,
   Trash2,
-  CheckCircle,
-  Clock,
-  Archive,
   ExternalLink,
   FileText,
 } from 'lucide-react';
@@ -22,18 +18,10 @@ import ContentCard from '@/components/ContentCard';
 import ContentCardSkeleton from '@/components/ContentCardSkeleton';
 
 interface ContentClientProps {
-  user: User;
   initialContent: Content[];
 }
 
-const statusConfig: Record<ContentStatus, { label: string; color: string; icon: typeof Clock }> = {
-  draft: { label: 'Draft', color: 'bg-yellow-500/20 text-yellow-400', icon: Clock },
-  approved: { label: 'Approved', color: 'bg-blue-500/20 text-blue-400', icon: CheckCircle },
-  published: { label: 'Published', color: 'bg-green-500/20 text-green-400', icon: CheckCircle },
-  archived: { label: 'Archived', color: 'bg-gray-500/20 text-gray-400', icon: Archive },
-};
-
-export default function ContentClient({ user, initialContent }: ContentClientProps) {
+export default function ContentClient({ initialContent }: ContentClientProps) {
   const router = useRouter();
   const supabase = createClient();
   const { contents, setContents, deleteContent, updateContent } = useContentStore();
@@ -74,10 +62,10 @@ export default function ContentClient({ user, initialContent }: ContentClientPro
 
   return (
     <>
-      <header className="border-border flex h-16 items-center justify-between border-b px-6">
+      <header className="flex h-16 items-center justify-between border-b border-border px-6">
         <div>
-          <h1 className="text-foreground text-xl font-semibold">Content Library</h1>
-          <p className="text-foreground-muted text-sm">Manage all your generated content</p>
+          <h1 className="text-xl font-semibold text-foreground">Content Library</h1>
+          <p className="text-sm text-foreground-muted">Manage all your generated content</p>
         </div>
         <a href="/dashboard/generate" className="btn-primary">
           <Plus className="mr-2 h-4 w-4" />
@@ -89,7 +77,7 @@ export default function ContentClient({ user, initialContent }: ContentClientPro
         {/* Filters */}
         <div className="mb-6 flex flex-col gap-4 sm:flex-row">
           <div className="relative max-w-md flex-1">
-            <Search className="text-foreground-muted absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2" />
+            <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-foreground-muted" />
             <input
               type="text"
               placeholder="Search content..."
@@ -99,7 +87,7 @@ export default function ContentClient({ user, initialContent }: ContentClientPro
             />
           </div>
           <div className="flex items-center gap-2">
-            <Filter className="text-foreground-muted h-5 w-5" />
+            <Filter className="h-5 w-5 text-foreground-muted" />
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value as ContentStatus | 'all')}
@@ -123,13 +111,13 @@ export default function ContentClient({ user, initialContent }: ContentClientPro
           </div>
         ) : filteredContent.length === 0 ? (
           <div className="card py-12 text-center">
-            <div className="bg-background-tertiary mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl">
-              <FileText className="text-foreground-muted h-8 w-8" />
+            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-background-tertiary">
+              <FileText className="h-8 w-8 text-foreground-muted" />
             </div>
-            <h3 className="text-foreground mb-2 text-lg font-medium">
+            <h3 className="mb-2 text-lg font-medium text-foreground">
               {searchQuery || statusFilter !== 'all' ? 'No content found' : 'No content yet'}
             </h3>
-            <p className="text-foreground-muted mb-4">
+            <p className="mb-4 text-foreground-muted">
               {searchQuery || statusFilter !== 'all'
                 ? 'Try adjusting your filters'
                 : 'Start generating content to see it here'}
@@ -155,16 +143,16 @@ export default function ContentClient({ user, initialContent }: ContentClientPro
                         e.stopPropagation();
                         setOpenMenuId(openMenuId === content.id ? null : content.id);
                       }}
-                      className="hover:bg-background-tertiary text-foreground-muted hover:text-foreground rounded-lg p-1 transition-colors"
+                      className="rounded-lg p-1 text-foreground-muted transition-colors hover:bg-background-tertiary hover:text-foreground"
                     >
                       <MoreVertical className="h-5 w-5" />
                     </button>
 
                     {openMenuId === content.id && (
-                      <div className="bg-background-secondary border-border absolute right-0 top-8 z-10 w-48 rounded-lg border shadow-xl">
+                      <div className="absolute right-0 top-8 z-10 w-48 rounded-lg border border-border bg-background-secondary shadow-xl">
                         <button
                           onClick={() => router.push(`/dashboard/content/${content.id}`)}
-                          className="text-foreground hover:bg-background-tertiary flex w-full items-center gap-2 px-3 py-2 text-sm transition-colors"
+                          className="flex w-full items-center gap-2 px-3 py-2 text-sm text-foreground transition-colors hover:bg-background-tertiary"
                         >
                           <Edit2 className="h-4 w-4" />
                           Edit Content
@@ -172,7 +160,7 @@ export default function ContentClient({ user, initialContent }: ContentClientPro
                         {content.status === 'draft' && (
                           <button
                             onClick={() => handleStatusChange(content.id, 'approved')}
-                            className="text-foreground hover:bg-background-tertiary flex w-full items-center gap-2 px-3 py-2 text-sm transition-colors"
+                            className="flex w-full items-center gap-2 px-3 py-2 text-sm text-foreground transition-colors hover:bg-background-tertiary"
                           >
                             <CheckCircle className="h-4 w-4" />
                             Mark as Approved
@@ -181,7 +169,7 @@ export default function ContentClient({ user, initialContent }: ContentClientPro
                         {content.status === 'approved' && (
                           <button
                             onClick={() => handleStatusChange(content.id, 'published')}
-                            className="text-foreground hover:bg-background-tertiary flex w-full items-center gap-2 px-3 py-2 text-sm transition-colors"
+                            className="flex w-full items-center gap-2 px-3 py-2 text-sm text-foreground transition-colors hover:bg-background-tertiary"
                           >
                             <ExternalLink className="h-4 w-4" />
                             Mark as Published
@@ -189,14 +177,14 @@ export default function ContentClient({ user, initialContent }: ContentClientPro
                         )}
                         <button
                           onClick={() => handleStatusChange(content.id, 'archived')}
-                          className="text-foreground hover:bg-background-tertiary flex w-full items-center gap-2 px-3 py-2 text-sm transition-colors"
+                          className="flex w-full items-center gap-2 px-3 py-2 text-sm text-foreground transition-colors hover:bg-background-tertiary"
                         >
                           <Archive className="h-4 w-4" />
                           Archive
                         </button>
                         <button
                           onClick={() => handleDelete(content.id)}
-                          className="text-error hover:bg-error/10 flex w-full items-center gap-2 px-3 py-2 text-sm transition-colors"
+                          className="flex w-full items-center gap-2 px-3 py-2 text-sm text-error transition-colors hover:bg-error/10"
                         >
                           <Trash2 className="h-4 w-4" />
                           Delete

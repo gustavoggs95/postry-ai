@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { User } from '@supabase/supabase-js';
-import { LogOut, User as UserIcon, Settings, ChevronDown } from 'lucide-react';
+import { LogOut, Settings, ChevronDown } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
 

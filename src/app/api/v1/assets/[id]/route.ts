@@ -28,7 +28,7 @@ export async function DELETE(
     }
 
     // Delete from storage
-    await supabaseAdmin.storage.from('media-assets').remove([asset.storage_path]);
+    await supabaseAdmin.storage.from('postry-bucket').remove([asset.storage_path]);
 
     // Delete from database
     const { error: deleteError } = await supabaseAdmin.from('media_assets').delete().eq('id', id);

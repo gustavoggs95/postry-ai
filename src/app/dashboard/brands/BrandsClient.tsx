@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import { User } from '@supabase/supabase-js';
 import { Plus, MoreVertical, Edit2, Trash2, Star, Search, Palette } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
@@ -22,7 +21,6 @@ const toneColors: Record<BrandTone, string> = {
 };
 
 export default function BrandsClient({ user, initialBrands }: BrandsClientProps) {
-  const router = useRouter();
   const supabase = createClient();
   const { brands, setBrands, deleteBrand, setDefaultBrand } = useBrandStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -33,11 +31,6 @@ export default function BrandsClient({ user, initialBrands }: BrandsClientProps)
   useEffect(() => {
     setBrands(initialBrands);
   }, [initialBrands, setBrands]);
-
-  const handleSignOut = async () => {
-    await supabase.auth.signOut();
-    router.push('/');
-  };
 
   const handleDelete = async (id: string) => {
     const { error } = await supabase.from('brands').delete().eq('id', id);
@@ -77,10 +70,10 @@ export default function BrandsClient({ user, initialBrands }: BrandsClientProps)
 
   return (
     <>
-      <header className="border-border flex h-16 items-center justify-between border-b px-6">
+      <header className="flex h-16 items-center justify-between border-b border-border px-6">
         <div>
-          <h1 className="text-foreground text-xl font-semibold">Brand Presets</h1>
-          <p className="text-foreground-muted text-sm">
+          <h1 className="text-xl font-semibold text-foreground">Brand Presets</h1>
+          <p className="text-sm text-foreground-muted">
             Save your brand voice for consistent content generation
           </p>
         </div>
@@ -94,7 +87,7 @@ export default function BrandsClient({ user, initialBrands }: BrandsClientProps)
         {/* Search */}
         <div className="mb-6">
           <div className="relative max-w-md">
-            <Search className="text-foreground-muted absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2" />
+            <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-foreground-muted" />
             <input
               type="text"
               placeholder="Search brands..."
@@ -108,13 +101,13 @@ export default function BrandsClient({ user, initialBrands }: BrandsClientProps)
         {/* Brands Grid */}
         {filteredBrands.length === 0 ? (
           <div className="card py-12 text-center">
-            <div className="bg-background-tertiary mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl">
-              <Palette className="text-foreground-muted h-8 w-8" />
+            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-background-tertiary">
+              <Palette className="h-8 w-8 text-foreground-muted" />
             </div>
-            <h3 className="text-foreground mb-2 text-lg font-medium">
+            <h3 className="mb-2 text-lg font-medium text-foreground">
               {searchQuery ? 'No brands found' : 'No brand presets yet'}
             </h3>
-            <p className="text-foreground-muted mb-4">
+            <p className="mb-4 text-foreground-muted">
               {searchQuery
                 ? 'Try a different search term'
                 : 'Create your first brand preset to maintain consistent voice across all content'}
@@ -131,7 +124,7 @@ export default function BrandsClient({ user, initialBrands }: BrandsClientProps)
             {filteredBrands.map((brand) => (
               <div key={brand.id} className="card group relative">
                 {brand.is_default && (
-                  <div className="bg-primary/20 text-primary absolute right-12 top-4 flex items-center gap-1 rounded-full px-2 py-1 text-xs font-medium">
+                  <div className="absolute right-12 top-4 flex items-center gap-1 rounded-full bg-primary/20 px-2 py-1 text-xs font-medium text-primary">
                     <Star className="h-3 w-3 fill-current" />
                     Default
                   </div>
@@ -141,16 +134,16 @@ export default function BrandsClient({ user, initialBrands }: BrandsClientProps)
                 <div className="absolute right-4 top-4">
                   <button
                     onClick={() => setOpenMenuId(openMenuId === brand.id ? null : brand.id)}
-                    className="hover:bg-background-tertiary text-foreground-muted hover:text-foreground rounded-lg p-1 transition-colors"
+                    className="rounded-lg p-1 text-foreground-muted transition-colors hover:bg-background-tertiary hover:text-foreground"
                   >
                     <MoreVertical className="h-5 w-5" />
                   </button>
 
                   {openMenuId === brand.id && (
-                    <div className="bg-background-secondary border-border absolute right-0 top-8 z-10 w-40 rounded-lg border shadow-xl">
+                    <div className="absolute right-0 top-8 z-10 w-40 rounded-lg border border-border bg-background-secondary shadow-xl">
                       <button
                         onClick={() => handleEdit(brand)}
-                        className="text-foreground hover:bg-background-tertiary flex w-full items-center gap-2 px-3 py-2 text-sm transition-colors"
+                        className="flex w-full items-center gap-2 px-3 py-2 text-sm text-foreground transition-colors hover:bg-background-tertiary"
                       >
                         <Edit2 className="h-4 w-4" />
                         Edit
@@ -158,7 +151,7 @@ export default function BrandsClient({ user, initialBrands }: BrandsClientProps)
                       {!brand.is_default && (
                         <button
                           onClick={() => handleSetDefault(brand.id)}
-                          className="text-foreground hover:bg-background-tertiary flex w-full items-center gap-2 px-3 py-2 text-sm transition-colors"
+                          className="flex w-full items-center gap-2 px-3 py-2 text-sm text-foreground transition-colors hover:bg-background-tertiary"
                         >
                           <Star className="h-4 w-4" />
                           Set as Default
@@ -166,7 +159,7 @@ export default function BrandsClient({ user, initialBrands }: BrandsClientProps)
                       )}
                       <button
                         onClick={() => handleDelete(brand.id)}
-                        className="text-error hover:bg-error/10 flex w-full items-center gap-2 px-3 py-2 text-sm transition-colors"
+                        className="flex w-full items-center gap-2 px-3 py-2 text-sm text-error transition-colors hover:bg-error/10"
                       >
                         <Trash2 className="h-4 w-4" />
                         Delete
@@ -176,9 +169,9 @@ export default function BrandsClient({ user, initialBrands }: BrandsClientProps)
                 </div>
 
                 <div className="mb-4">
-                  <h3 className="text-foreground mb-1 text-lg font-semibold">{brand.name}</h3>
+                  <h3 className="mb-1 text-lg font-semibold text-foreground">{brand.name}</h3>
                   {brand.description && (
-                    <p className="text-foreground-muted line-clamp-2 text-sm">
+                    <p className="line-clamp-2 text-sm text-foreground-muted">
                       {brand.description}
                     </p>
                   )}
@@ -191,20 +184,20 @@ export default function BrandsClient({ user, initialBrands }: BrandsClientProps)
                     {brand.tone}
                   </span>
                   {brand.use_emojis && (
-                    <span className="bg-accent/20 text-accent rounded-full px-2 py-1 text-xs font-medium">
+                    <span className="rounded-full bg-accent/20 px-2 py-1 text-xs font-medium text-accent">
                       Uses Emojis
                     </span>
                   )}
                 </div>
 
                 {brand.industry && (
-                  <p className="text-foreground-muted mb-2 text-xs">
+                  <p className="mb-2 text-xs text-foreground-muted">
                     <span className="font-medium">Industry:</span> {brand.industry}
                   </p>
                 )}
 
                 {brand.target_audience && (
-                  <p className="text-foreground-muted mb-2 text-xs">
+                  <p className="mb-2 text-xs text-foreground-muted">
                     <span className="font-medium">Audience:</span> {brand.target_audience}
                   </p>
                 )}
@@ -214,13 +207,13 @@ export default function BrandsClient({ user, initialBrands }: BrandsClientProps)
                     {brand.keywords.slice(0, 3).map((keyword, i) => (
                       <span
                         key={i}
-                        className="bg-background-tertiary text-foreground-muted rounded px-2 py-0.5 text-xs"
+                        className="rounded bg-background-tertiary px-2 py-0.5 text-xs text-foreground-muted"
                       >
                         {keyword}
                       </span>
                     ))}
                     {brand.keywords.length > 3 && (
-                      <span className="text-foreground-muted px-2 py-0.5 text-xs">
+                      <span className="px-2 py-0.5 text-xs text-foreground-muted">
                         +{brand.keywords.length - 3} more
                       </span>
                     )}

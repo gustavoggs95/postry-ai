@@ -1,16 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { User } from '@supabase/supabase-js';
 import {
-  Sparkles,
-  LayoutDashboard,
-  Palette,
-  FileText,
-  Calendar as CalendarIcon,
-  Settings,
-  LogOut,
   ChevronLeft,
   ChevronRight,
   Plus,
@@ -39,7 +31,6 @@ interface CalendarClientProps {
   availableContent: Content[];
 }
 
-
 const platformConfig: Record<string, { icon: typeof Linkedin; color: string; label: string }> = {
   linkedin: { icon: Linkedin, color: 'bg-blue-600', label: 'LinkedIn' },
   twitter: { icon: Twitter, color: 'bg-sky-500', label: 'Twitter' },
@@ -64,11 +55,9 @@ const MONTHS = [
 ];
 
 export default function CalendarClient({
-  user,
   initialScheduledContent,
   availableContent,
 }: CalendarClientProps) {
-  const router = useRouter();
   const supabase = createClient();
   const [currentDate, setCurrentDate] = useState(new Date());
   const [scheduledContent, setScheduledContent] =
@@ -78,11 +67,6 @@ export default function CalendarClient({
   const [selectedContent, setSelectedContent] = useState<string>('');
   const [selectedPlatform, setSelectedPlatform] = useState<string>('');
   const [selectedTime, setSelectedTime] = useState('09:00');
-
-  const handleSignOut = async () => {
-    await supabase.auth.signOut();
-    router.push('/');
-  };
 
   const getDaysInMonth = (date: Date) => {
     const year = date.getFullYear();
@@ -170,141 +154,139 @@ export default function CalendarClient({
 
   return (
     <>
-      <header className="border-border flex h-16 items-center justify-between border-b px-6">
-          <div>
-            <h1 className="text-foreground text-xl font-semibold">Content Calendar</h1>
-            <p className="text-foreground-muted text-sm">
-              Schedule and manage your content publishing
-            </p>
-          </div>
-        </header>
+      <header className="flex h-16 items-center justify-between border-b border-border px-6">
+        <div>
+          <h1 className="text-xl font-semibold text-foreground">Content Calendar</h1>
+          <p className="text-sm text-foreground-muted">
+            Schedule and manage your content publishing
+          </p>
+        </div>
+      </header>
 
-        <div className="p-6">
-          {/* Calendar Header */}
-          <div className="mb-6 flex items-center justify-between">
-            <h2 className="text-foreground text-2xl font-bold">
-              {MONTHS[currentDate.getMonth()]} {currentDate.getFullYear()}
-            </h2>
-            <div className="flex items-center gap-2">
-              <button
-                onClick={handlePrevMonth}
-                className="hover:bg-background-tertiary text-foreground-muted hover:text-foreground rounded-lg p-2 transition-colors"
-              >
-                <ChevronLeft className="h-5 w-5" />
-              </button>
-              <button onClick={() => setCurrentDate(new Date())} className="btn-secondary text-sm">
-                Today
-              </button>
-              <button
-                onClick={handleNextMonth}
-                className="hover:bg-background-tertiary text-foreground-muted hover:text-foreground rounded-lg p-2 transition-colors"
-              >
-                <ChevronRight className="h-5 w-5" />
-              </button>
-            </div>
-          </div>
-
-          {/* Calendar Grid */}
-          <div className="card overflow-hidden p-0">
-            {/* Day Headers */}
-            <div className="border-border grid grid-cols-7 border-b">
-              {DAYS.map((day) => (
-                <div
-                  key={day}
-                  className="text-foreground-muted border-border border-r p-3 text-center text-sm font-medium last:border-r-0"
-                >
-                  {day}
-                </div>
-              ))}
-            </div>
-
-            {/* Calendar Days */}
-            <div className="grid grid-cols-7">
-              {days.map((date, index) => {
-                const isToday =
-                  date &&
-                  date.getDate() === today.getDate() &&
-                  date.getMonth() === today.getMonth() &&
-                  date.getFullYear() === today.getFullYear();
-                const scheduled = date ? getScheduledForDate(date) : [];
-
-                return (
-                  <div
-                    key={index}
-                    className={`border-border min-h-[120px] border-b border-r p-2 last:border-r-0 ${
-                      date
-                        ? 'hover:bg-background-tertiary cursor-pointer'
-                        : 'bg-background-secondary'
-                    }`}
-                    onClick={() => date && handleDateClick(date)}
-                  >
-                    {date && (
-                      <>
-                        <div
-                          className={`mb-1 flex h-7 w-7 items-center justify-center rounded-full text-sm ${
-                            isToday ? 'bg-primary font-bold text-white' : 'text-foreground'
-                          }`}
-                        >
-                          {date.getDate()}
-                        </div>
-                        <div className="space-y-1">
-                          {scheduled.slice(0, 3).map((item) => {
-                            const config = platformConfig[item.platform];
-                            const Icon = config?.icon || FileText;
-                            return (
-                              <div
-                                key={item.id}
-                                className={`flex items-center gap-1 rounded px-1.5 py-0.5 text-xs ${config?.color || 'bg-gray-500'} text-white`}
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                }}
-                              >
-                                <Icon className="h-3 w-3" />
-                                <span className="truncate">
-                                  {new Date(item.scheduled_at).toLocaleTimeString('en-US', {
-                                    hour: 'numeric',
-                                    minute: '2-digit',
-                                  })}
-                                </span>
-                                <button
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleRemoveScheduled(item.id);
-                                  }}
-                                  className="ml-auto rounded p-0.5 hover:bg-white/20"
-                                >
-                                  <X className="h-3 w-3" />
-                                </button>
-                              </div>
-                            );
-                          })}
-                          {scheduled.length > 3 && (
-                            <div className="text-foreground-muted text-xs">
-                              +{scheduled.length - 3} more
-                            </div>
-                          )}
-                        </div>
-                      </>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
+      <div className="p-6">
+        {/* Calendar Header */}
+        <div className="mb-6 flex items-center justify-between">
+          <h2 className="text-2xl font-bold text-foreground">
+            {MONTHS[currentDate.getMonth()]} {currentDate.getFullYear()}
+          </h2>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={handlePrevMonth}
+              className="rounded-lg p-2 text-foreground-muted transition-colors hover:bg-background-tertiary hover:text-foreground"
+            >
+              <ChevronLeft className="h-5 w-5" />
+            </button>
+            <button onClick={() => setCurrentDate(new Date())} className="btn-secondary text-sm">
+              Today
+            </button>
+            <button
+              onClick={handleNextMonth}
+              className="rounded-lg p-2 text-foreground-muted transition-colors hover:bg-background-tertiary hover:text-foreground"
+            >
+              <ChevronRight className="h-5 w-5" />
+            </button>
           </div>
         </div>
 
-        {/* Schedule Modal */}
-        {isModalOpen && (
+        {/* Calendar Grid */}
+        <div className="card overflow-hidden p-0">
+          {/* Day Headers */}
+          <div className="grid grid-cols-7 border-b border-border">
+            {DAYS.map((day) => (
+              <div
+                key={day}
+                className="border-r border-border p-3 text-center text-sm font-medium text-foreground-muted last:border-r-0"
+              >
+                {day}
+              </div>
+            ))}
+          </div>
+
+          {/* Calendar Days */}
+          <div className="grid grid-cols-7">
+            {days.map((date, index) => {
+              const isToday =
+                date &&
+                date.getDate() === today.getDate() &&
+                date.getMonth() === today.getMonth() &&
+                date.getFullYear() === today.getFullYear();
+              const scheduled = date ? getScheduledForDate(date) : [];
+
+              return (
+                <div
+                  key={index}
+                  className={`min-h-[120px] border-b border-r border-border p-2 last:border-r-0 ${
+                    date ? 'cursor-pointer hover:bg-background-tertiary' : 'bg-background-secondary'
+                  }`}
+                  onClick={() => date && handleDateClick(date)}
+                >
+                  {date && (
+                    <>
+                      <div
+                        className={`mb-1 flex h-7 w-7 items-center justify-center rounded-full text-sm ${
+                          isToday ? 'bg-primary font-bold text-white' : 'text-foreground'
+                        }`}
+                      >
+                        {date.getDate()}
+                      </div>
+                      <div className="space-y-1">
+                        {scheduled.slice(0, 3).map((item) => {
+                          const config = platformConfig[item.platform];
+                          const Icon = config?.icon || FileText;
+                          return (
+                            <div
+                              key={item.id}
+                              className={`flex items-center gap-1 rounded px-1.5 py-0.5 text-xs ${config?.color || 'bg-gray-500'} text-white`}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                              }}
+                            >
+                              <Icon className="h-3 w-3" />
+                              <span className="truncate">
+                                {new Date(item.scheduled_at).toLocaleTimeString('en-US', {
+                                  hour: 'numeric',
+                                  minute: '2-digit',
+                                })}
+                              </span>
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleRemoveScheduled(item.id);
+                                }}
+                                className="ml-auto rounded p-0.5 hover:bg-white/20"
+                              >
+                                <X className="h-3 w-3" />
+                              </button>
+                            </div>
+                          );
+                        })}
+                        {scheduled.length > 3 && (
+                          <div className="text-xs text-foreground-muted">
+                            +{scheduled.length - 3} more
+                          </div>
+                        )}
+                      </div>
+                    </>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+
+      {/* Schedule Modal */}
+      {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           <div
             className="absolute inset-0 bg-black/60 backdrop-blur-sm"
             onClick={() => setIsModalOpen(false)}
           />
-          <div className="bg-background-secondary border-border relative m-4 w-full max-w-md rounded-2xl border shadow-2xl">
-            <div className="border-border flex items-center justify-between border-b p-6">
+          <div className="relative m-4 w-full max-w-md rounded-2xl border border-border bg-background-secondary shadow-2xl">
+            <div className="flex items-center justify-between border-b border-border p-6">
               <div>
-                <h2 className="text-foreground text-xl font-semibold">Schedule Content</h2>
-                <p className="text-foreground-muted text-sm">
+                <h2 className="text-xl font-semibold text-foreground">Schedule Content</h2>
+                <p className="text-sm text-foreground-muted">
                   {selectedDate?.toLocaleDateString('en-US', {
                     weekday: 'long',
                     month: 'long',
@@ -314,7 +296,7 @@ export default function CalendarClient({
               </div>
               <button
                 onClick={() => setIsModalOpen(false)}
-                className="hover:bg-background-tertiary text-foreground-muted hover:text-foreground rounded-lg p-2 transition-colors"
+                className="rounded-lg p-2 text-foreground-muted transition-colors hover:bg-background-tertiary hover:text-foreground"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -323,7 +305,7 @@ export default function CalendarClient({
             <div className="space-y-4 p-6">
               {availableContent.length === 0 ? (
                 <div className="py-6 text-center">
-                  <p className="text-foreground-muted mb-3">No content available to schedule</p>
+                  <p className="mb-3 text-foreground-muted">No content available to schedule</p>
                   <a href="/dashboard/generate" className="btn-primary inline-flex">
                     Generate Content
                   </a>
@@ -389,7 +371,7 @@ export default function CalendarClient({
                   <div>
                     <label className="label">Time</label>
                     <div className="relative">
-                      <Clock className="text-foreground-muted absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2" />
+                      <Clock className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-foreground-muted" />
                       <input
                         type="time"
                         value={selectedTime}

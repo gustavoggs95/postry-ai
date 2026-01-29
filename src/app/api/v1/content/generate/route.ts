@@ -115,7 +115,37 @@ ${brand.keywords?.length ? `- Key topics/keywords: ${brand.keywords.join(', ')}`
         quality: 'standard',
       });
 
-      imageUrl = imageResponse.data?.[0]?.url;
+      const tempUrl = imageResponse.data?.[0]?.url;
+
+      // Download image from OpenAI and upload to Supabase Storage
+      if (tempUrl) {
+        try {
+          const imageResponse = await fetch(tempUrl);
+          const imageBlob = await imageResponse.blob();
+          const fileName = `content-images/${user.id}/${Date.now()}.png`;
+
+          const { error: uploadError } = await supabaseAdmin.storage
+            .from('postry-bucket')
+            .upload(fileName, imageBlob, {
+              contentType: 'image/png',
+              cacheControl: '3600',
+            });
+
+          if (uploadError) {
+            console.error('Failed to upload image to storage:', uploadError);
+          } else {
+            // Get public URL
+            const {
+              data: { publicUrl },
+            } = supabaseAdmin.storage.from('postry-bucket').getPublicUrl(fileName);
+            imageUrl = publicUrl;
+          }
+        } catch (error) {
+          console.error('Failed to save image:', error);
+          // Fallback to temporary URL if upload fails
+          imageUrl = tempUrl;
+        }
+      }
     }
 
     // Save to database

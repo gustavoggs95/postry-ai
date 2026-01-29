@@ -32,7 +32,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
 
     // Download file from Supabase Storage
     const { data: fileData, error: downloadError } = await supabaseAdmin.storage
-      .from('media-assets')
+      .from('postry-bucket')
       .download(asset.storage_path);
 
     if (downloadError || !fileData) {

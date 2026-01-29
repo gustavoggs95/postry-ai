@@ -30,12 +30,12 @@ const sidebarItems = [
 
 export default function DashboardLayout({ user, children, activeItem }: DashboardLayoutProps) {
   return (
-    <div className="bg-background flex min-h-screen">
+    <div className="flex min-h-screen bg-background">
       {/* Sidebar */}
-      <aside className="bg-background-secondary border-border flex w-64 flex-col border-r">
-        <div className="border-border flex h-16 items-center gap-3 border-b px-4">
+      <aside className="flex w-64 flex-col border-r border-border bg-background-secondary">
+        <div className="flex h-16 items-center gap-3 border-b border-border px-4">
           <img src="/images/postry-icon.png" alt="Postry AI" className="h-10 w-auto" />
-          <span className="text-foreground text-xl font-bold">Postry AI</span>
+          <span className="text-xl font-bold text-foreground">Postry AI</span>
         </div>
 
         <nav className="flex-1 p-4">
@@ -58,7 +58,7 @@ export default function DashboardLayout({ user, children, activeItem }: Dashboar
           </ul>
         </nav>
 
-        <div className="border-border border-t p-4">
+        <div className="border-t border-border p-4">
           <UserDropdown user={user} position="top" />
         </div>
       </aside>

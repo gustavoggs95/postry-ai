@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Sparkles, Mail, Lock, User, Chrome, Loader2, Check, X } from 'lucide-react';
+import { Mail, Lock, User, Chrome, Loader2, Check, X } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 
 export default function AuthPage() {
@@ -87,21 +87,21 @@ export default function AuthPage() {
 
   if (success) {
     return (
-      <div className="bg-gradient-dark flex min-h-screen items-center justify-center p-4">
+      <div className="flex min-h-screen items-center justify-center bg-gradient-dark p-4">
         <div className="w-full max-w-md">
           <div className="card relative text-center">
             <Link
               href="/"
               aria-label="Close"
-              className="text-foreground-muted hover:text-foreground absolute right-4 top-4 transition-colors"
+              className="absolute right-4 top-4 text-foreground-muted transition-colors hover:text-foreground"
             >
               <X className="h-5 w-5" />
             </Link>
-            <div className="bg-success/20 mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full">
-              <Check className="text-success h-8 w-8" />
+            <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-success/20">
+              <Check className="h-8 w-8 text-success" />
             </div>
-            <h1 className="text-foreground mb-2 text-2xl font-bold">Check your email</h1>
-            <p className="text-foreground-muted mb-6">
+            <h1 className="mb-2 text-2xl font-bold text-foreground">Check your email</h1>
+            <p className="mb-6 text-foreground-muted">
               We&apos;ve sent a confirmation link to <strong>{email}</strong>. Click the link to
               verify your account.
             </p>
@@ -121,27 +121,27 @@ export default function AuthPage() {
   }
 
   return (
-    <div className="bg-gradient-dark flex min-h-screen items-center justify-center p-4">
+    <div className="flex min-h-screen items-center justify-center bg-gradient-dark p-4">
       <div className="w-full max-w-md">
         {/* Card */}
         <div className="card relative">
           <Link
             href="/"
             aria-label="Close"
-            className="text-foreground-muted hover:text-foreground absolute right-4 top-4 transition-colors"
+            className="absolute right-4 top-4 text-foreground-muted transition-colors hover:text-foreground"
           >
             <X className="h-5 w-5" />
           </Link>
           {/* Logo */}
           <div className="mb-8 flex items-center justify-center gap-3">
             <img src="/images/postry-icon.png" alt="Postry AI" className="h-12 w-auto" />
-            <span className="text-foreground text-2xl font-bold">Postry AI</span>
+            <span className="text-2xl font-bold text-foreground">Postry AI</span>
           </div>
 
-          <h1 className="text-foreground mb-2 text-center text-2xl font-bold">
+          <h1 className="mb-2 text-center text-2xl font-bold text-foreground">
             {view === 'login' ? 'Welcome back' : 'Create an account'}
           </h1>
-          <p className="text-foreground-muted mb-8 text-center">
+          <p className="mb-8 text-center text-foreground-muted">
             {view === 'login'
               ? 'Sign in to your account to continue'
               : 'Start creating amazing content with AI'}
@@ -149,7 +149,7 @@ export default function AuthPage() {
 
           {/* Error Message */}
           {error && (
-            <div className="bg-error/10 border-error/20 text-error mb-6 rounded-lg border p-3 text-sm">
+            <div className="mb-6 rounded-lg border border-error/20 bg-error/10 p-3 text-sm text-error">
               {error}
             </div>
           )}
@@ -167,10 +167,10 @@ export default function AuthPage() {
           {/* Divider */}
           <div className="relative mb-6">
             <div className="absolute inset-0 flex items-center">
-              <div className="border-border w-full border-t" />
+              <div className="w-full border-t border-border" />
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="bg-card text-foreground-muted px-2">Or continue with email</span>
+              <span className="bg-card px-2 text-foreground-muted">Or continue with email</span>
             </div>
           </div>
 
@@ -182,7 +182,7 @@ export default function AuthPage() {
                   Full Name
                 </label>
                 <div className="relative">
-                  <User className="text-foreground-muted absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2" />
+                  <User className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-foreground-muted" />
                   <input
                     id="fullName"
                     type="text"
@@ -201,7 +201,7 @@ export default function AuthPage() {
                 Email
               </label>
               <div className="relative">
-                <Mail className="text-foreground-muted absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2" />
+                <Mail className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-foreground-muted" />
                 <input
                   id="email"
                   type="email"
@@ -219,7 +219,7 @@ export default function AuthPage() {
                 Password
               </label>
               <div className="relative">
-                <Lock className="text-foreground-muted absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2" />
+                <Lock className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-foreground-muted" />
                 <input
                   id="password"
                   type="password"
@@ -232,7 +232,7 @@ export default function AuthPage() {
                 />
               </div>
               {view === 'signup' && (
-                <p className="text-foreground-muted mt-1 text-xs">
+                <p className="mt-1 text-xs text-foreground-muted">
                   Must be at least 6 characters long
                 </p>
               )}
@@ -242,7 +242,7 @@ export default function AuthPage() {
               <div className="flex items-center justify-end">
                 <Link
                   href="/forgot-password"
-                  className="text-primary hover:text-primary-hover text-sm"
+                  className="text-sm text-primary hover:text-primary-hover"
                 >
                   Forgot password?
                 </Link>
@@ -265,7 +265,7 @@ export default function AuthPage() {
 
           {/* Terms (signup only) */}
           {view === 'signup' && (
-            <p className="text-foreground-muted mt-6 text-center text-xs">
+            <p className="mt-6 text-center text-xs text-foreground-muted">
               By signing up, you agree to our{' '}
               <Link href="/terms" className="text-primary hover:text-primary-hover">
                 Terms of Service
@@ -278,11 +278,11 @@ export default function AuthPage() {
           )}
 
           {/* Toggle view */}
-          <p className="text-foreground-muted mt-6 text-center">
+          <p className="mt-6 text-center text-foreground-muted">
             {view === 'login' ? "Don't have an account? " : 'Already have an account? '}
             <button
               onClick={toggleView}
-              className="text-primary hover:text-primary-hover font-medium"
+              className="font-medium text-primary hover:text-primary-hover"
             >
               {view === 'login' ? 'Create Account' : 'Sign in'}
             </button>

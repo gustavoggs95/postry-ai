@@ -11,6 +11,8 @@ import {
   Trash2,
   ExternalLink,
   FileText,
+  CheckCircle,
+  Archive,
 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { useContentStore, Content, ContentStatus } from '@/lib/stores';

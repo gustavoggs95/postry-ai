@@ -12,6 +12,7 @@ import {
   Video,
   X,
   Clock,
+  FileText,
 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { Content } from '@/lib/stores';

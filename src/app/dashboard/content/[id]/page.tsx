@@ -24,5 +24,5 @@ export default async function ContentDetailPage({ params }: { params: Promise<{ 
     redirect('/dashboard/content');
   }
 
-  return <ContentDetailClient user={user} content={content} />;
+  return <ContentDetailClient content={content} />;
 }

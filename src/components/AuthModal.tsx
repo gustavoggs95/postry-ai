@@ -121,7 +121,7 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
           <div className="mb-8 text-center">
             <div className="mx-auto mb-4 flex items-center justify-center gap-3">
               <img src="/images/postry-icon.png" alt="Postry AI" className="h-12 w-auto" />
-              <span className="text-foreground text-2xl font-bold">Postry AI</span>
+              <span className="text-2xl font-bold text-foreground">Postry AI</span>
             </div>
             <h2 className="mb-2 text-2xl font-bold text-white">
               {view === 'login' ? 'Welcome back' : 'Create account'}
@@ -219,7 +219,7 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
             <button
               type="submit"
               disabled={loading}
-              className="from-primary to-accent w-full rounded-lg bg-gradient-to-r px-4 py-3 font-semibold text-white transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
+              className="w-full rounded-lg bg-gradient-to-r from-primary to-accent px-4 py-3 font-semibold text-white transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {loading ? 'Loading...' : view === 'login' ? 'Sign in' : 'Create Account'}
             </button>
@@ -235,7 +235,7 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
                 setEmail('');
                 setPassword('');
               }}
-              className="text-primary hover:text-primary/80 font-medium"
+              className="font-medium text-primary hover:text-primary/80"
             >
               {view === 'login' ? 'Create Account' : 'Sign in'}
             </button>

@@ -6,8 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint . --ext .ts,.tsx,.js,.jsx",
-    "lint:fix": "eslint . --ext .ts,.tsx,.js,.jsx --fix"
+    "lint": "eslint . --ext .ts,.tsx,.js,.jsx && tsc --noEmit",
+    "lint:fix": "eslint . --ext .ts,.tsx,.js,.jsx --fix",
+    "type": "tsc --noEmit"
   },
   "dependencies": {
     "@supabase/ssr": "^0.6.0",

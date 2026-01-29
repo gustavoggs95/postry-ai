@@ -15,6 +15,7 @@ import {
   Check,
   RefreshCw,
   ChevronDown,
+  Palette,
 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { useBrandStore, useContentStore, Brand } from '@/lib/stores';

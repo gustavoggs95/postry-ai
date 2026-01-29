@@ -20,5 +20,5 @@ export default async function GeneratePage() {
     .eq('user_id', user.id)
     .order('is_default', { ascending: false });
 
-  return <GenerateClient user={user} initialBrands={brands || []} />;
+  return <GenerateClient initialBrands={brands || []} />;
 }

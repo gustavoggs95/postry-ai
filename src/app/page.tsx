@@ -143,7 +143,7 @@ export default function HomePage() {
           </div>
           <h1 className="mb-6 text-5xl font-bold tracking-tight text-foreground sm:text-6xl lg:text-7xl">
             Transform Content Into
-            <span className="gradient-text mt-2 block">Multi-Platform Magic</span>
+            <span className="gradient-text mt-2 block pb-2">Multi-Platform Magic</span>
           </h1>
           <p className="mx-auto mb-10 max-w-2xl text-xl text-foreground-muted">
             Paste a blog URL and let AI generate LinkedIn posts, TikTok scripts, and cover images.

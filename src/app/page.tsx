@@ -121,8 +121,22 @@ export default function HomePage() {
       </nav>
 
       {/* Hero Section */}
-      <section className="px-4 pb-20 pt-32">
-        <div className="mx-auto max-w-7xl text-center">
+      <section className="relative overflow-hidden px-4 pb-20 pt-32">
+        {/* Animated Background Effects */}
+        <div className="pointer-events-none absolute inset-0">
+          {/* Gradient Orbs */}
+          <div className="absolute -left-40 top-0 h-[500px] w-[500px] animate-pulse-slow rounded-full bg-primary/60 opacity-60 blur-3xl" />
+          <div className="absolute -right-40 top-20 h-[600px] w-[600px] animate-pulse-slower rounded-full bg-purple-500/60 opacity-60 blur-3xl" />
+          <div className="absolute left-1/2 top-1/3 h-[400px] w-[400px] -translate-x-1/2 animate-float rounded-full bg-blue-500/50 opacity-70 blur-3xl" />
+          <div className="absolute left-1/4 top-1/2 h-[350px] w-[350px] animate-pulse-slow rounded-full bg-pink-500/50 opacity-50 blur-3xl" style={{ animationDelay: '2s' }} />
+          <div className="absolute right-1/4 top-2/3 h-[450px] w-[450px] animate-pulse-slower rounded-full bg-cyan-500/50 opacity-50 blur-3xl" style={{ animationDelay: '4s' }} />
+          <div className="absolute left-3/4 top-10 h-[300px] w-[300px] animate-float rounded-full bg-indigo-500/40 opacity-50 blur-3xl" style={{ animationDelay: '1s' }} />
+          
+          {/* Grid Pattern */}
+          <div className="absolute inset-0 bg-[linear-gradient(rgba(139,92,246,0.12)_1px,transparent_1px),linear-gradient(90deg,rgba(139,92,246,0.12)_1px,transparent_1px)] bg-[size:64px_64px] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_50%,black,transparent)]" />
+        </div>
+
+        <div className="relative z-10 mx-auto max-w-7xl text-center">
           <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-2">
             <Sparkles className="h-4 w-4 text-primary" />
             <span className="text-sm text-primary">Automated Content Factory</span>
@@ -135,7 +149,7 @@ export default function HomePage() {
             Paste a blog URL and let AI generate LinkedIn posts, TikTok scripts, and cover images.
             All with your brand voice, automatically.
           </p>
-          <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
+          <div className="mb-16 flex flex-col items-center justify-center gap-4 sm:flex-row">
             <button
               onClick={() => openAuthModal('signup')}
               className="btn-primary px-8 py-3 text-lg"
@@ -147,24 +161,22 @@ export default function HomePage() {
               See How It Works
             </Link>
           </div>
-        </div>
-      </section>
 
-      {/* Demo Preview */}
-      <section className="px-4 py-12">
-        <div className="mx-auto max-w-5xl">
-          <div className="card overflow-hidden border-border-light bg-background-secondary">
-            <div className="mb-4 flex items-center gap-2">
-              <div className="h-3 w-3 rounded-full bg-error" />
-              <div className="h-3 w-3 rounded-full bg-warning" />
-              <div className="h-3 w-3 rounded-full bg-success" />
-            </div>
-            <div className="overflow-hidden rounded-lg bg-background">
-              <img
-                src="/images/dashboard.png"
-                alt="Postry AI Dashboard Preview"
-                className="h-auto w-full"
-              />
+          {/* Demo Preview */}
+          <div className="mx-auto max-w-5xl">
+            <div className="card overflow-hidden border-border-light bg-background-secondary">
+              <div className="mb-4 flex items-center gap-2">
+                <div className="h-3 w-3 rounded-full bg-error" />
+                <div className="h-3 w-3 rounded-full bg-warning" />
+                <div className="h-3 w-3 rounded-full bg-success" />
+              </div>
+              <div className="overflow-hidden rounded-lg bg-background">
+                <img
+                  src="/images/dashboard.png"
+                  alt="Postry AI Dashboard Preview"
+                  className="h-auto w-full"
+                />
+              </div>
             </div>
           </div>
         </div>

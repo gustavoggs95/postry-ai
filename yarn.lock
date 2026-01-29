@@ -991,6 +991,7 @@ __metadata:
     eslint-config-next: "npm:16.1.0"
     lucide-react: "npm:^0.563.0"
     next: "npm:16.1.0"
+    openai: "npm:^6.17.0"
     postcss: "npm:^8.5.3"
     prettier: "npm:^3.5.3"
     prettier-plugin-tailwindcss: "npm:^0.6.12"
@@ -1000,6 +1001,7 @@ __metadata:
     tailwind-merge: "npm:^3.0.0"
     tailwindcss: "npm:^3.4.17"
     typescript: "npm:^5.8.3"
+    zod: "npm:^4.3.6"
     zustand: "npm:^5.0.10"
   languageName: unknown
   linkType: soft
@@ -4492,6 +4494,23 @@ __metadata:
   languageName: node
   linkType: hard
 
+"openai@npm:^6.17.0":
+  version: 6.17.0
+  resolution: "openai@npm:6.17.0"
+  peerDependencies:
+    ws: ^8.18.0
+    zod: ^3.25 || ^4.0
+  peerDependenciesMeta:
+    ws:
+      optional: true
+    zod:
+      optional: true
+  bin:
+    openai: bin/cli
+  checksum: 7671a9656082504c74fe67b498e88ed1dd6310b20147a6cd8dbc1d6a4b28ec1ba256b0b7032f32ee078043e339683f5d17a449c46ebdd5f40fbcc8fe340bbbf9
+  languageName: node
+  linkType: hard
+
 "optionator@npm:^0.9.3":
   version: 0.9.4
   resolution: "optionator@npm:0.9.4"
@@ -6186,7 +6205,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zod@npm:^3.25.0 || ^4.0.0":
+"zod@npm:^3.25.0 || ^4.0.0, zod@npm:^4.3.6":
   version: 4.3.6
   resolution: "zod@npm:4.3.6"
   checksum: 860d25a81ab41d33aa25f8d0d07b091a04acb426e605f396227a796e9e800c44723ed96d0f53a512b57be3d1520f45bf69c0cb3b378a232a00787a2609625307

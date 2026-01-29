@@ -198,7 +198,3 @@ The application uses a modern dark theme with animated backgrounds:
 ## 📄 License
 
 MIT License - feel free to use this project for your own purposes.
-
----
-
-Built with ❤️ using Next.js 16 and AI-powered development

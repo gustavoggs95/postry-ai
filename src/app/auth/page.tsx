@@ -133,10 +133,8 @@ export default function AuthPage() {
             <X className="h-5 w-5" />
           </Link>
           {/* Logo */}
-          <div className="mb-8 flex items-center justify-center gap-2">
-            <div className="bg-gradient-primary flex h-10 w-10 items-center justify-center rounded-xl">
-              <Sparkles className="h-6 w-6 text-white" />
-            </div>
+          <div className="mb-8 flex items-center justify-center gap-3">
+            <img src="/images/postry-icon.png" alt="Postry AI" className="h-12 w-auto" />
             <span className="text-foreground text-2xl font-bold">Postry AI</span>
           </div>
 

@@ -29,6 +29,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
+      <head>
+        <link rel="icon" href="/images/postry-favicon.png" />
+      </head>
       <body className={`${inter.variable} font-sans`}>{children}</body>
     </html>
   );

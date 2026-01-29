@@ -91,10 +91,8 @@ export default function HomePage() {
       <nav className="glass fixed left-0 right-0 top-0 z-50">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-primary">
-                <Sparkles className="h-5 w-5 text-white" />
-              </div>
+            <div className="flex items-center gap-3">
+              <img src="/images/postry-icon.png" alt="Postry AI" className="h-10 w-auto" />
               <span className="text-xl font-bold text-foreground">Postry AI</span>
             </div>
             <div className="flex items-center gap-4">
@@ -251,9 +249,7 @@ export default function HomePage() {
         <div className="mx-auto max-w-7xl">
           <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
             <div className="flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-primary">
-                <Sparkles className="h-5 w-5 text-white" />
-              </div>
+              <img src="/images/postry-icon.png" alt="Postry AI" className="h-8 w-auto" />
               <span className="text-lg font-bold text-foreground">Postry AI</span>
             </div>
             <p className="text-sm text-foreground-muted">© 2026 Postry AI. All rights reserved.</p>

@@ -119,20 +119,9 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
         <div className="p-8">
           {/* Header */}
           <div className="mb-8 text-center">
-            <div className="from-primary to-accent mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-r">
-              <svg
-                className="h-6 w-8 text-white"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M13 10V3L4 14h7v7l9-11h-7z"
-                />
-              </svg>
+            <div className="mx-auto mb-4 flex items-center justify-center gap-3">
+              <img src="/images/postry-icon.png" alt="Postry AI" className="h-12 w-auto" />
+              <span className="text-foreground text-2xl font-bold">Postry AI</span>
             </div>
             <h2 className="mb-2 text-2xl font-bold text-white">
               {view === 'login' ? 'Welcome back' : 'Create account'}

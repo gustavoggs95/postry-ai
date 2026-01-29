@@ -42,10 +42,8 @@ export default function DashboardLayoutClient({ user, children }: DashboardLayou
     <div className="bg-background flex min-h-screen">
       {/* Sidebar */}
       <aside className="bg-background-secondary border-border flex w-64 flex-col border-r">
-        <div className="border-border flex h-16 items-center gap-2 border-b px-4">
-          <div className="bg-gradient-primary flex h-10 w-10 items-center justify-center rounded-xl">
-            <Sparkles className="h-5 w-5 text-white" />
-          </div>
+        <div className="border-border flex h-16 items-center gap-3 border-b px-4">
+          <img src="/images/postry-icon.png" alt="Postry AI" className="h-10 w-auto" />
           <span className="text-foreground text-xl font-bold">Postry AI</span>
         </div>
 

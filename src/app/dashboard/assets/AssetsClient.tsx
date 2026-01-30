@@ -91,7 +91,7 @@ export default function AssetsClient({ initialAssets, brands }: AssetsClientProp
 
       // Upload to Supabase Storage
       const { data: uploadData, error: uploadError } = await supabase.storage
-        .from('media-assets')
+        .from('postry-bucket')
         .upload(storagePath, file);
 
       clearInterval(progressInterval);
@@ -102,7 +102,7 @@ export default function AssetsClient({ initialAssets, brands }: AssetsClientProp
 
       // Create database record
       const { data: assetData, error: dbError } = await supabase
-        .from('media_assets')
+        .from('postry-bucket')
         .insert({
           user_id: user.id,
           filename: file.name,
@@ -223,7 +223,7 @@ export default function AssetsClient({ initialAssets, brands }: AssetsClientProp
       await supabase.storage.from('media-assets').remove([asset.storage_path]);
 
       // Delete from database
-      await supabase.from('media_assets').delete().eq('id', asset.id);
+      await supabase.from('postry-bucket').delete().eq('id', asset.id);
 
       setAssets((prev) => prev.filter((a) => a.id !== asset.id));
       if (selectedAsset?.id === asset.id) {
@@ -304,15 +304,15 @@ export default function AssetsClient({ initialAssets, brands }: AssetsClientProp
             <button
               onClick={() => fileInputRef.current?.click()}
               disabled={uploading}
-              className="hover:border-primary w-full rounded-lg border-2 border-dashed border-gray-700 p-8 text-center transition-colors disabled:opacity-50"
+              className="w-full rounded-lg border-2 border-dashed border-gray-700 p-8 text-center transition-colors hover:border-primary disabled:opacity-50"
             >
               {uploading ? (
                 <div className="space-y-3">
-                  <div className="border-primary mx-auto h-12 w-12 animate-spin rounded-full border-4 border-t-transparent" />
+                  <div className="mx-auto h-12 w-12 animate-spin rounded-full border-4 border-primary border-t-transparent" />
                   <p className="text-gray-400">Uploading... {uploadProgress}%</p>
                   <div className="h-2 w-full rounded-full bg-gray-700">
                     <div
-                      className="bg-primary h-2 rounded-full transition-all duration-300"
+                      className="h-2 rounded-full bg-primary transition-all duration-300"
                       style={{ width: `${uploadProgress}%` }}
                     />
                   </div>
@@ -370,7 +370,7 @@ export default function AssetsClient({ initialAssets, brands }: AssetsClientProp
                     key={asset.id}
                     className={`hover:bg-surface-light cursor-pointer p-4 transition-colors ${
                       selectedAsset?.id === asset.id
-                        ? 'bg-surface-light border-primary border-l-2'
+                        ? 'bg-surface-light border-l-2 border-primary'
                         : ''
                     }`}
                     onClick={() => {
@@ -435,7 +435,7 @@ export default function AssetsClient({ initialAssets, brands }: AssetsClientProp
               <div className="bg-surface rounded-xl border border-gray-800 p-6">
                 <div className="mb-4 flex items-center justify-between">
                   <h2 className="text-lg font-semibold text-white">Asset Details</h2>
-                  <span className="bg-primary/20 text-primary rounded-full px-3 py-1 text-sm">
+                  <span className="rounded-full bg-primary/20 px-3 py-1 text-sm text-primary">
                     {selectedAsset.file_type.split('/')[0].toUpperCase()}
                   </span>
                 </div>
@@ -454,7 +454,7 @@ export default function AssetsClient({ initialAssets, brands }: AssetsClientProp
                         <button
                           onClick={() => handleTranscribe(selectedAsset)}
                           disabled={transcribing}
-                          className="bg-accent hover:bg-accent/90 rounded-lg px-3 py-1 text-sm font-medium text-black transition-colors disabled:opacity-50"
+                          className="rounded-lg bg-accent px-3 py-1 text-sm font-medium text-black transition-colors hover:bg-accent/90 disabled:opacity-50"
                         >
                           {transcribing ? 'Transcribing...' : 'Transcribe with AI'}
                         </button>
@@ -470,7 +470,7 @@ export default function AssetsClient({ initialAssets, brands }: AssetsClientProp
                       <div className="bg-surface-light rounded-lg p-4 text-center">
                         {transcribing ? (
                           <div className="flex items-center justify-center gap-2 text-gray-400">
-                            <div className="border-accent h-4 w-4 animate-spin rounded-full border-2 border-t-transparent" />
+                            <div className="h-4 w-4 animate-spin rounded-full border-2 border-accent border-t-transparent" />
                             <span>Transcribing audio...</span>
                           </div>
                         ) : (
@@ -499,7 +499,7 @@ export default function AssetsClient({ initialAssets, brands }: AssetsClientProp
                       <select
                         value={selectedBrand}
                         onChange={(e) => setSelectedBrand(e.target.value)}
-                        className="bg-surface-light focus:border-primary w-full rounded-lg border border-gray-700 px-4 py-2 text-white focus:outline-none"
+                        className="bg-surface-light w-full rounded-lg border border-gray-700 px-4 py-2 text-white focus:border-primary focus:outline-none"
                       >
                         {brands.map((brand) => (
                           <option key={brand.id} value={brand.id}>
@@ -516,7 +516,7 @@ export default function AssetsClient({ initialAssets, brands }: AssetsClientProp
                     <button
                       onClick={handleGenerateContent}
                       disabled={generating || !selectedBrand}
-                      className="from-primary to-accent w-full rounded-lg bg-gradient-to-r px-6 py-3 font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-50"
+                      className="w-full rounded-lg bg-gradient-to-r from-primary to-accent px-6 py-3 font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-50"
                     >
                       {generating ? (
                         <span className="flex items-center justify-center gap-2">

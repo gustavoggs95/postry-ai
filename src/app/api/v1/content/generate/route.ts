@@ -29,6 +29,27 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Either URL or text is required' }, { status: 400 });
     }
 
+    // Limit: 5 generations per user per month
+    const now = new Date();
+    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+    const { count, error: countError } = await supabaseAdmin
+      .from('content')
+      .select('id', { count: 'exact', head: true })
+      .eq('user_id', user.id)
+      .gte('created_at', startOfMonth.toISOString())
+      .lt('created_at', endOfMonth.toISOString());
+    console.log('count', count, 'countError', countError);
+    if (countError) {
+      return NextResponse.json({ error: 'Failed to check usage limit' }, { status: 500 });
+    }
+    if ((count ?? 0) >= 5) {
+      return NextResponse.json(
+        { error: 'Monthly generation limit reached (5 per month)' },
+        { status: 429 }
+      );
+    }
+
     // Fetch brand configuration
     const { data: brandExists } = await supabaseAdmin
       .from('brands')

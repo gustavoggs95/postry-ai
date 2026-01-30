@@ -123,7 +123,6 @@ export default function GenerateClient({ initialBrands }: GenerateClientProps) {
       const data = await response.json();
       setGeneratedContent(data.generated);
       setGeneratedImageUrl(data.imageUrl);
-      console.log('Generated image URL:', data.imageUrl);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to generate content');
     } finally {

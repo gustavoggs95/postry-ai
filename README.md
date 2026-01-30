@@ -16,7 +16,7 @@
 - **Approval Workflow** - Draft → Approved → Archived status with full version tracking
 - **Content Calendar** - Visual scheduling with drag-and-drop interface (coming soon)
 - **Asset Transformation** - Upload videos, get transcriptions, and repurpose into tweets, blogs, and Reels
-- **AI Model Selection** - Choose between GPT-5.1, GPT-5 Mini, or GPT-5 Nano for quality vs. cost optimization
+- **AI Model Selection** - GPT-5 Mini, or GPT-5 Nano for quality vs. cost optimization
 
 ## 🛠️ Tech Stack
 
@@ -137,7 +137,7 @@ yarn dev
 
 - `POST /api/v1/content/generate` - Generate content from URL
   - Body: `{ url?, text?, brandId, contentTypes, generateImage?, model? }`
-  - Models: `gpt-5.1`, `gpt-5-mini`, `gpt-5-nano`
+  - Models: `gpt-5-mini`, `gpt-5-nano`
 
 ### Content Management
 

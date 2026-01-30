@@ -43,9 +43,7 @@ export default function GenerateClient({ initialBrands }: GenerateClientProps) {
   const [textInput, setTextInput] = useState('');
   const [selectedPlatforms, setSelectedPlatforms] = useState<Platform[]>(['linkedin']);
   const [generateImage, setGenerateImage] = useState(false);
-  const [selectedModel, setSelectedModel] = useState<'gpt-5.1' | 'gpt-5-mini' | 'gpt-5-nano'>(
-    'gpt-5-mini'
-  );
+  const [selectedModel, setSelectedModel] = useState<'gpt-5-mini' | 'gpt-5-nano'>('gpt-5-mini');
   const [generatedContent, setGeneratedContent] = useState<Record<string, string>>({});
   const [generatedImageUrl, setGeneratedImageUrl] = useState<string | null>(null);
   const [copiedPlatform, setCopiedPlatform] = useState<string | null>(null);
@@ -345,19 +343,15 @@ export default function GenerateClient({ initialBrands }: GenerateClientProps) {
               <h3 className="mb-4 text-lg font-semibold text-foreground">AI Model</h3>
               <select
                 value={selectedModel}
-                onChange={(e) =>
-                  setSelectedModel(e.target.value as 'gpt-5.1' | 'gpt-5-mini' | 'gpt-5-nano')
-                }
+                onChange={(e) => setSelectedModel(e.target.value as 'gpt-5-mini' | 'gpt-5-nano')}
                 className="input w-full"
               >
                 <option value="gpt-5-mini">GPT-5 Mini (Recommended)</option>
-                <option value="gpt-5.1">GPT-5.1 (Intelligent Reasoning)</option>
                 <option value="gpt-5-nano">GPT-5 Nano (Fastest & Cheapest)</option>
               </select>
               <p className="mt-2 text-xs text-foreground-muted">
                 {selectedModel === 'gpt-5-mini' &&
                   'Balanced performance and cost - great for most use cases'}
-                {selectedModel === 'gpt-5.1' && 'Better reasoning - higher quality output'}
                 {selectedModel === 'gpt-5-nano' && 'Fastest generation - most cost-effective'}
               </p>
             </div>

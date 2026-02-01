@@ -68,9 +68,13 @@ export default function ContentCard({ content, onClick, menu }: ContentCardProps
           <StatusIcon className="h-3 w-3" />
           {statusConfig[status]?.label || 'Draft'}
         </span>
-        {content.brands?.name && (
+        {content.brands?.name ? (
           <span className="rounded-full bg-primary/20 px-2 py-1 text-xs font-medium text-primary">
             {content.brands.name}
+          </span>
+        ) : (
+          <span className="rounded-full bg-primary/20 px-2 py-1 text-xs font-medium text-primary">
+            Default
           </span>
         )}
       </div>

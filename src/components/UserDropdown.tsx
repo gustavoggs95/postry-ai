@@ -46,27 +46,27 @@ export default function UserDropdown({ user, position = 'bottom' }: UserDropdown
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 rounded-lg px-3 py-2 transition-colors hover:bg-gray-800"
+        className="flex w-full items-center gap-2 rounded-lg px-3 py-2 transition-colors hover:bg-gray-800"
       >
-        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-r from-purple-500 to-pink-500">
+        <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-r from-purple-500 to-pink-500">
           <span className="text-sm font-medium text-white">{userName.charAt(0).toUpperCase()}</span>
         </div>
-        <div className="hidden text-left sm:block">
-          <p className="text-sm font-medium text-white">{userName}</p>
-          <p className="text-xs text-gray-400">{userEmail}</p>
+        <div className="min-w-0 flex-1 text-left">
+          <p className="truncate text-sm font-medium text-white">{userName}</p>
+          <p className="truncate text-xs text-gray-400">{userEmail}</p>
         </div>
         <ChevronDown
-          className={`h-4 w-4 text-gray-400 transition-transform ${isOpen ? 'rotate-180' : ''}`}
+          className={`h-4 w-4 flex-shrink-0 text-gray-400 transition-transform ${isOpen ? 'rotate-180' : ''}`}
         />
       </button>
 
       {isOpen && (
         <div
-          className={`absolute right-0 w-56 rounded-lg border border-gray-800 bg-[#18181b] shadow-xl ${position === 'top' ? 'bottom-full mb-2' : 'mt-2'}`}
+          className={`absolute left-0 right-0 rounded-lg border border-gray-800 bg-[#18181b] shadow-xl ${position === 'top' ? 'bottom-full mb-2' : 'mt-2'}`}
         >
           <div className="border-b border-gray-800 p-3">
-            <p className="text-sm font-medium text-white">{userName}</p>
-            <p className="text-xs text-gray-400">{userEmail}</p>
+            <p className="truncate text-sm font-medium text-white">{userName}</p>
+            <p className="truncate text-xs text-gray-400">{userEmail}</p>
           </div>
 
           <div className="p-1">

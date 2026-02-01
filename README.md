@@ -58,7 +58,7 @@ postry-ai/
 │   ├── components/              # Shared React components
 │   │   ├── AuthModal.tsx
 │   │   ├── ContentCard.tsx
-│   │   ├── DashboardLayout.tsx
+│   │   ├── DashboardLayoutClient.tsx
 │   │   └── UserDropdown.tsx
 │   └── lib/                     # Utilities & clients
 │       ├── supabase/            # Supabase client configs

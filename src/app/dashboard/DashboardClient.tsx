@@ -21,35 +21,57 @@ interface DashboardClientProps {
   user: User;
 }
 
-const stats = [
-  { label: 'Content Generated', value: '0', icon: FileText, trend: '+0%' },
-  { label: 'Posts Scheduled', value: '0', icon: Clock, trend: '+0%' },
-  { label: 'Brands Created', value: '0', icon: Palette, trend: '+0%' },
-  { label: 'Time Saved', value: '0h', icon: TrendingUp, trend: '+0%' },
-];
-
 export default function DashboardClient({ user: initialUser }: DashboardClientProps) {
   const router = useRouter();
   const [user, setUser] = useState<User>(initialUser);
   const [recentContent, setRecentContent] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [stats, setStats] = useState({
+    contentGenerated: 0,
+    postsScheduled: 0,
+    brandsCreated: 0,
+    timeSaved: 0,
+  });
 
   useEffect(() => {
     const supabase = createClient();
 
-    // Fetch recent content
-    const fetchContent = async () => {
-      const { data } = await supabase
+    // Fetch recent content and stats
+    const fetchData = async () => {
+      // Fetch recent content
+      const { data: contentData } = await supabase
         .from('content')
         .select('*, brands(name)')
         .order('created_at', { ascending: false })
         .limit(6);
 
-      setRecentContent(data || []);
+      setRecentContent(contentData || []);
+
+      // Fetch stats
+      const [{ count: totalContent }, { count: scheduledContent }, { count: totalBrands }] =
+        await Promise.all([
+          supabase.from('content').select('*', { count: 'exact', head: true }),
+          supabase
+            .from('content')
+            .select('*', { count: 'exact', head: true })
+            .eq('status', 'scheduled'),
+          supabase.from('brands').select('*', { count: 'exact', head: true }),
+        ]);
+
+      // Calculate time saved (assuming 30 minutes saved per content piece)
+      const timeSavedHours = Math.round(((totalContent || 0) * 30) / 60);
+
+      setStats({
+        contentGenerated: totalContent || 0,
+        postsScheduled: scheduledContent || 0,
+        brandsCreated: totalBrands || 0,
+        timeSaved: timeSavedHours,
+      });
+
       setLoading(false);
     };
 
-    fetchContent();
+    fetchData();
 
     // Listen for auth state changes
     const {
@@ -67,6 +89,29 @@ export default function DashboardClient({ user: initialUser }: DashboardClientPr
 
   const userName = user.user_metadata?.full_name || user.email?.split('@')[0] || 'User';
 
+  const statsDisplay = [
+    {
+      label: 'Content Generated',
+      value: stats.contentGenerated.toString(),
+      icon: FileText,
+    },
+    {
+      label: 'Posts Scheduled',
+      value: stats.postsScheduled.toString(),
+      icon: Clock,
+    },
+    {
+      label: 'Brands Created',
+      value: stats.brandsCreated.toString(),
+      icon: Palette,
+    },
+    {
+      label: 'Time Saved',
+      value: `${stats.timeSaved}h`,
+      icon: TrendingUp,
+    },
+  ];
+
   return (
     <>
       {/* Header */}
@@ -75,7 +120,7 @@ export default function DashboardClient({ user: initialUser }: DashboardClientPr
           <h1 className="text-xl font-semibold text-foreground">Dashboard</h1>
           <p className="text-sm text-foreground-muted">Welcome back, {userName}!</p>
         </div>
-        <button className="btn-primary">
+        <button onClick={() => router.push('/dashboard/generate')} className="btn-primary">
           <Plus className="mr-2 h-4 w-4" />
           New Content
         </button>
@@ -85,7 +130,7 @@ export default function DashboardClient({ user: initialUser }: DashboardClientPr
       <div className="p-6">
         {/* Stats Grid */}
         <div className="mb-8 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
-          {stats.map((stat) => (
+          {statsDisplay.map((stat) => (
             <div key={stat.label} className="card">
               <div className="flex items-start justify-between">
                 <div>
@@ -96,7 +141,6 @@ export default function DashboardClient({ user: initialUser }: DashboardClientPr
                   <stat.icon className="h-5 w-5 text-primary" />
                 </div>
               </div>
-              <p className="mt-2 text-xs text-success">{stat.trend} from last month</p>
             </div>
           ))}
         </div>
@@ -106,8 +150,11 @@ export default function DashboardClient({ user: initialUser }: DashboardClientPr
           <h2 className="mb-4 text-lg font-semibold text-foreground">Quick Actions</h2>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
             {/* Generate from URL */}
-            <div className="card group cursor-pointer hover:border-primary/50">
-              <div className="flex items-center gap-4">
+            <div
+              onClick={() => router.push('/dashboard/generate')}
+              className="card group flex cursor-pointer items-center hover:border-primary/50"
+            >
+              <div className="flex w-full items-center gap-4">
                 <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-primary">
                   <LinkIcon className="h-6 w-6 text-white" />
                 </div>
@@ -119,14 +166,17 @@ export default function DashboardClient({ user: initialUser }: DashboardClientPr
                     Paste a blog article URL to generate content
                   </p>
                 </div>
-                <ChevronRight className="h-5 w-5 text-foreground-muted transition-colors group-hover:text-primary" />
+                <ChevronRight className="h-5 w-5 flex-shrink-0 text-foreground-muted transition-colors group-hover:text-primary" />
               </div>
             </div>
 
             {/* Create Brand */}
-            <div className="card group cursor-pointer hover:border-primary/50">
-              <div className="flex items-center gap-4">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-accent/20">
+            <div
+              onClick={() => router.push('/dashboard/brands')}
+              className="card group flex cursor-pointer items-center hover:border-primary/50"
+            >
+              <div className="flex w-full items-center gap-4">
+                <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-accent/20">
                   <Palette className="h-6 w-6 text-accent" />
                 </div>
                 <div className="flex-1">
@@ -137,13 +187,16 @@ export default function DashboardClient({ user: initialUser }: DashboardClientPr
                     Save your brand voice for consistent content
                   </p>
                 </div>
-                <ChevronRight className="h-5 w-5 text-foreground-muted transition-colors group-hover:text-primary" />
+                <ChevronRight className="h-5 w-5 flex-shrink-0 text-foreground-muted transition-colors group-hover:text-primary" />
               </div>
             </div>
 
             {/* Transform Video */}
-            <div className="card group cursor-pointer hover:border-primary/50">
-              <div className="flex items-center gap-4">
+            <div
+              onClick={() => router.push('/dashboard/assets')}
+              className="card group flex cursor-pointer items-center hover:border-primary/50"
+            >
+              <div className="flex w-full items-center gap-4">
                 <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-success/20">
                   <Zap className="h-6 w-6 text-success" />
                 </div>

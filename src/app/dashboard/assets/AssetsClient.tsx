@@ -3,16 +3,17 @@
 import { useState, useRef } from 'react';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
+import { DEFAULT_BRAND } from '@/lib/constants/default-brand';
 
 interface MediaAsset {
   id: string;
   user_id: string;
-  filename: string;
+  file_name: string;
   file_type: string;
   file_size: number;
   storage_path: string;
-  thumbnail_path: string | null;
   transcription: string | null;
+  transcription_status: string;
   metadata: Record<string, unknown>;
   created_at: string;
 }
@@ -20,7 +21,7 @@ interface MediaAsset {
 interface Brand {
   id: string;
   name: string;
-  voice_tone: string;
+  tone: string;
 }
 
 interface AssetsClientProps {
@@ -31,6 +32,9 @@ interface AssetsClientProps {
 export default function AssetsClient({ initialAssets, brands }: AssetsClientProps) {
   const supabase = createClient();
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Add default brand if user has no brands
+  const brandsWithDefault = brands.length === 0 ? [DEFAULT_BRAND] : brands;
 
   const [assets, setAssets] = useState<MediaAsset[]>(initialAssets);
   const [uploading, setUploading] = useState(false);
@@ -43,7 +47,7 @@ export default function AssetsClient({ initialAssets, brands }: AssetsClientProp
     blogOutline: string;
     reelsIdeas: string[];
   } | null>(null);
-  const [selectedBrand, setSelectedBrand] = useState<string>(brands[0]?.id || '');
+  const [selectedBrand, setSelectedBrand] = useState<string>(brandsWithDefault[0]?.id || '');
 
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -79,6 +83,23 @@ export default function AssetsClient({ initialAssets, brands }: AssetsClientProp
       } = await supabase.auth.getUser();
       if (!user) throw new Error('Not authenticated');
 
+      // Check monthly upload limit (5 per month)
+      const now = new Date();
+      const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+      const { count: uploadCount, error: countError } = await supabase
+        .from('media_assets')
+        .select('id', { count: 'exact', head: true })
+        .eq('user_id', user.id)
+        .gte('created_at', startOfMonth.toISOString());
+
+      if (countError) {
+        throw new Error('Failed to check upload limit');
+      }
+      if ((uploadCount ?? 0) >= 5) {
+        alert('Monthly upload limit reached (5 uploads per month)');
+        return;
+      }
+
       // Create unique filename
       const timestamp = Date.now();
       const sanitizedName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_');
@@ -102,10 +123,10 @@ export default function AssetsClient({ initialAssets, brands }: AssetsClientProp
 
       // Create database record
       const { data: assetData, error: dbError } = await supabase
-        .from('postry-bucket')
+        .from('media_assets')
         .insert({
           user_id: user.id,
-          filename: file.name,
+          file_name: file.name,
           file_type: file.type,
           file_size: file.size,
           storage_path: uploadData.path,
@@ -145,16 +166,13 @@ export default function AssetsClient({ initialAssets, brands }: AssetsClientProp
       } = await supabase.auth.getSession();
       if (!session) throw new Error('Not authenticated');
 
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/assets/${asset.id}/transcribe`,
-        {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${session.access_token}`,
-            'Content-Type': 'application/json',
-          },
-        }
-      );
+      const response = await fetch(`/api/v1/assets/${asset.id}/transcribe`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${session.access_token}`,
+          'Content-Type': 'application/json',
+        },
+      });
 
       if (!response.ok) throw new Error('Transcription failed');
 
@@ -188,28 +206,40 @@ export default function AssetsClient({ initialAssets, brands }: AssetsClientProp
       } = await supabase.auth.getSession();
       if (!session) throw new Error('Not authenticated');
 
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/assets/${selectedAsset.id}/generate`,
-        {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${session.access_token}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            brandId: selectedBrand,
-            formats: ['tweets', 'blog', 'reels'],
-          }),
-        }
-      );
+      // Use the main content generation endpoint with transcription as text input
+      const response = await fetch(`/api/v1/content/generate`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${session.access_token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          text: selectedAsset.transcription,
+          brandId: selectedBrand,
+          contentTypes: ['twitter', 'instagram', 'blog'],
+          generateImage: false,
+          model: 'gpt-5-mini',
+        }),
+      });
 
-      if (!response.ok) throw new Error('Content generation failed');
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Content generation failed');
+      }
 
       const data = await response.json();
-      setGeneratedContent(data.content);
+
+      // Transform the response to match our expected format
+      setGeneratedContent({
+        tweets: data.generated?.twitter?.split('\n\n').filter((t: string) => t.trim()) || [],
+        blogOutline: data.generated?.blog || '',
+        reelsIdeas: data.generated?.instagram?.split('\n\n').filter((i: string) => i.trim()) || [],
+      });
     } catch (error) {
       console.error('Generation error:', error);
-      alert('Failed to generate content. Please try again.');
+      alert(
+        error instanceof Error ? error.message : 'Failed to generate content. Please try again.'
+      );
     } finally {
       setGenerating(false);
     }
@@ -220,10 +250,10 @@ export default function AssetsClient({ initialAssets, brands }: AssetsClientProp
 
     try {
       // Delete from storage
-      await supabase.storage.from('media-assets').remove([asset.storage_path]);
+      await supabase.storage.from('postry-bucket').remove([asset.storage_path]);
 
       // Delete from database
-      await supabase.from('postry-bucket').delete().eq('id', asset.id);
+      await supabase.from('media_assets').delete().eq('id', asset.id);
 
       setAssets((prev) => prev.filter((a) => a.id !== asset.id));
       if (selectedAsset?.id === asset.id) {
@@ -381,7 +411,7 @@ export default function AssetsClient({ initialAssets, brands }: AssetsClientProp
                     <div className="flex items-start gap-3">
                       <div className="text-gray-400">{getFileIcon(asset.file_type)}</div>
                       <div className="min-w-0 flex-1">
-                        <p className="truncate font-medium text-white">{asset.filename}</p>
+                        <p className="truncate font-medium text-white">{asset.file_name}</p>
                         <p className="text-sm text-gray-500">
                           {formatFileSize(asset.file_size)} •{' '}
                           {new Date(asset.created_at).toLocaleDateString()}
@@ -443,7 +473,7 @@ export default function AssetsClient({ initialAssets, brands }: AssetsClientProp
                 <div className="space-y-4">
                   <div>
                     <p className="text-sm text-gray-400">Filename</p>
-                    <p className="text-white">{selectedAsset.filename}</p>
+                    <p className="text-white">{selectedAsset.file_name}</p>
                   </div>
 
                   {/* Transcription Section */}
@@ -499,16 +529,17 @@ export default function AssetsClient({ initialAssets, brands }: AssetsClientProp
                       <select
                         value={selectedBrand}
                         onChange={(e) => setSelectedBrand(e.target.value)}
-                        className="bg-surface-light w-full rounded-lg border border-gray-700 px-4 py-2 text-white focus:border-primary focus:outline-none"
+                        className="w-full rounded-lg border border-gray-700 bg-gray-900 px-4 py-2 text-white focus:border-primary focus:outline-none"
                       >
-                        {brands.map((brand) => (
-                          <option key={brand.id} value={brand.id}>
-                            {brand.name} - {brand.voice_tone}
+                        {brandsWithDefault.map((brand) => (
+                          <option
+                            key={brand.id}
+                            value={brand.id}
+                            className="bg-gray-900 text-white"
+                          >
+                            {brand.name} - {brand.tone}
                           </option>
                         ))}
-                        {brands.length === 0 && (
-                          <option value="">No brands - Create one first</option>
-                        )}
                       </select>
                     </div>
 

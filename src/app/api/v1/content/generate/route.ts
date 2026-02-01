@@ -3,13 +3,18 @@ import { z } from 'zod';
 import { getAuthenticatedUser, unauthorizedResponse } from '@/lib/api-auth';
 import { supabaseAdmin } from '@/lib/supabase/admin';
 import { openai } from '@/lib/openai';
+import { DEFAULT_BRAND, isDefaultBrand } from '@/lib/constants/default-brand';
 
 // Generate content schema
 const generateContentSchema = z.object({
   url: z.string().url().optional(),
   text: z.string().optional(),
-  brandId: z.string().uuid(),
-  contentTypes: z.array(z.enum(['linkedin', 'tiktok', 'twitter', 'instagram'])),
+  brandId: z
+    .string()
+    .refine((id) => id === DEFAULT_BRAND.id || z.string().uuid().safeParse(id).success, {
+      message: 'Invalid brand ID',
+    }),
+  contentTypes: z.array(z.enum(['linkedin', 'tiktok', 'twitter', 'instagram', 'blog'])),
   generateImage: z.boolean().default(false),
   model: z.enum(['gpt-5-mini', 'gpt-5-nano']).default('gpt-5-mini'),
 });
@@ -39,7 +44,7 @@ export async function POST(request: NextRequest) {
       .eq('user_id', user.id)
       .gte('created_at', startOfMonth.toISOString())
       .lt('created_at', endOfMonth.toISOString());
-    console.log('count', count, 'countError', countError);
+
     if (countError) {
       return NextResponse.json({ error: 'Failed to check usage limit' }, { status: 500 });
     }
@@ -51,40 +56,49 @@ export async function POST(request: NextRequest) {
     }
 
     // Fetch brand configuration
-    const { data: brandExists } = await supabaseAdmin
-      .from('brands')
-      .select('id, user_id')
-      .eq('id', validatedData.brandId)
-      .maybeSingle();
+    let brand;
 
-    const { data: brand, error: brandError } = await supabaseAdmin
-      .from('brands')
-      .select('*')
-      .eq('id', validatedData.brandId)
-      .eq('user_id', user.id)
-      .maybeSingle();
+    // Check if using default brand
+    if (isDefaultBrand(validatedData.brandId)) {
+      brand = DEFAULT_BRAND;
+    } else {
+      const { data: brandExists } = await supabaseAdmin
+        .from('brands')
+        .select('id, user_id')
+        .eq('id', validatedData.brandId)
+        .maybeSingle();
 
-    if (brandError || !brand) {
-      console.error('Brand lookup error:', {
-        brandId: validatedData.brandId,
-        userId: user.id,
-        error: brandError,
-      });
-      return NextResponse.json(
-        {
-          error: brandExists ? 'Brand does not belong to this user' : 'Brand not found',
-          details:
-            process.env.NODE_ENV === 'development'
-              ? {
-                  brandId: validatedData.brandId,
-                  userId: user.id,
-                  brandOwnerId: brandExists?.user_id,
-                  supabaseError: brandError?.message,
-                }
-              : undefined,
-        },
-        { status: 404 }
-      );
+      const { data: fetchedBrand, error: brandError } = await supabaseAdmin
+        .from('brands')
+        .select('*')
+        .eq('id', validatedData.brandId)
+        .eq('user_id', user.id)
+        .maybeSingle();
+
+      if (brandError || !fetchedBrand) {
+        console.error('Brand lookup error:', {
+          brandId: validatedData.brandId,
+          userId: user.id,
+          error: brandError,
+        });
+        return NextResponse.json(
+          {
+            error: brandExists ? 'Brand does not belong to this user' : 'Brand not found',
+            details:
+              process.env.NODE_ENV === 'development'
+                ? {
+                    brandId: validatedData.brandId,
+                    userId: user.id,
+                    brandOwnerId: brandExists?.user_id,
+                    supabaseError: brandError?.message,
+                  }
+                : undefined,
+          },
+          { status: 404 }
+        );
+      }
+
+      brand = fetchedBrand;
     }
 
     // Build the brand voice prompt
@@ -93,8 +107,8 @@ Brand Voice Guidelines:
 - Name: ${brand.name}
 - Tone: ${brand.tone}
 - Style: ${brand.style || 'Default professional style'}
-- Uses Emojis: ${brand.useEmojis ? 'Yes, use emojis appropriately' : 'No, avoid emojis'}
-- Target Audience: ${brand.targetAudience || 'General professional audience'}
+- Uses Emojis: ${brand.use_emojis ? 'Yes, use emojis appropriately' : 'No, avoid emojis'}
+- Target Audience: ${brand.target_audience || 'General professional audience'}
 - Industry: ${brand.industry || 'Not specified'}
 ${brand.keywords?.length ? `- Key topics/keywords: ${brand.keywords.join(', ')}` : ''}
 `;
@@ -103,23 +117,43 @@ ${brand.keywords?.length ? `- Key topics/keywords: ${brand.keywords.join(', ')}`
 
     const generatedContent: Record<string, string> = {};
 
+    // Check if using reasoning model
+    const isReasoningModel = validatedData.model.startsWith('gpt-5');
+
+    // Calculate appropriate token limit based on content length
+    // Reasoning models need more tokens for long content (they use tokens for thinking)
+    const contentLength = sourceContent.length;
+    const baseTokens = isReasoningModel ? 2000 : 1000;
+    const maxTokens = isReasoningModel && contentLength > 3000 ? 4000 : baseTokens;
+
     // Generate content for each requested type
     for (const contentType of validatedData.contentTypes) {
       const prompt = getPromptForContentType(contentType, sourceContent, brandVoice);
 
       const completion = await openai.chat.completions.create({
         model: validatedData.model,
-        messages: [
-          {
-            role: 'system',
-            content: `You are an expert social media content creator. Create engaging content that matches the brand voice exactly. ${brandVoice}`,
-          },
-          {
-            role: 'user',
-            content: prompt,
-          },
-        ],
-        max_completion_tokens: 1000,
+        messages: isReasoningModel
+          ? [
+              {
+                role: 'user',
+                content: `You are an expert social media content creator. Create engaging content that matches the brand voice exactly.
+
+${brandVoice}
+
+${prompt}`,
+              },
+            ]
+          : [
+              {
+                role: 'system',
+                content: `You are an expert social media content creator. Create engaging content that matches the brand voice exactly. ${brandVoice}`,
+              },
+              {
+                role: 'user',
+                content: prompt,
+              },
+            ],
+        max_completion_tokens: maxTokens,
       });
 
       generatedContent[contentType] = completion.choices[0]?.message?.content || '';
@@ -174,7 +208,7 @@ ${brand.keywords?.length ? `- Key topics/keywords: ${brand.keywords.join(', ')}`
       .from('content')
       .insert({
         user_id: user.id,
-        brand_id: validatedData.brandId,
+        brand_id: isDefaultBrand(validatedData.brandId) ? null : validatedData.brandId,
         source_url: validatedData.url,
         source_text: validatedData.text,
         generated_content: generatedContent,
@@ -245,6 +279,20 @@ ${brandVoice}`;
 
     case 'instagram':
       return `Create an Instagram caption based on the following content. Include relevant hashtags (5-10) and a compelling caption that encourages engagement.
+
+Source Content:
+${sourceContent}
+
+Remember to match the brand voice:
+${brandVoice}`;
+
+    case 'blog':
+      return `Create a detailed blog post outline based on the following content. Include:
+- A compelling title
+- Introduction hook
+- 3-5 main sections with bullet points
+- Conclusion with call-to-action
+Format it in markdown.
 
 Source Content:
 ${sourceContent}

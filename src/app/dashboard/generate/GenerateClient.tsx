@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { useBrandStore, useContentStore, Brand } from '@/lib/stores';
+import { DEFAULT_BRAND } from '@/lib/constants/default-brand';
 
 interface GenerateClientProps {
   initialBrands: Brand[];
@@ -51,9 +52,11 @@ export default function GenerateClient({ initialBrands }: GenerateClientProps) {
   const [brandDropdownOpen, setBrandDropdownOpen] = useState(false);
 
   useEffect(() => {
-    setBrands(initialBrands);
-    if (initialBrands.length > 0 && !selectedBrand) {
-      const defaultBrand = initialBrands.find((b) => b.is_default) || initialBrands[0];
+    // Add default brand if user has no brands
+    const brandsWithDefault = initialBrands.length === 0 ? [DEFAULT_BRAND] : initialBrands;
+    setBrands(brandsWithDefault);
+    if (brandsWithDefault.length > 0 && !selectedBrand) {
+      const defaultBrand = brandsWithDefault.find((b) => b.is_default) || brandsWithDefault[0];
       selectBrand(defaultBrand);
     }
   }, [initialBrands, setBrands, selectBrand, selectedBrand]);

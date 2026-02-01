@@ -30,6 +30,28 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       return NextResponse.json({ transcription: asset.transcription });
     }
 
+    // Limit: 5 transcriptions per user per month
+    const now = new Date();
+    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+    const { count: transcriptionCount, error: countError } = await supabaseAdmin
+      .from('media_assets')
+      .select('id', { count: 'exact', head: true })
+      .eq('user_id', user.id)
+      .not('transcription', 'is', null)
+      .gte('created_at', startOfMonth.toISOString())
+      .lt('created_at', endOfMonth.toISOString());
+
+    if (countError) {
+      return NextResponse.json({ error: 'Failed to check usage limit' }, { status: 500 });
+    }
+    if ((transcriptionCount ?? 0) >= 5) {
+      return NextResponse.json(
+        { error: 'Monthly transcription limit reached (5 per month)' },
+        { status: 429 }
+      );
+    }
+
     // Download file from Supabase Storage
     const { data: fileData, error: downloadError } = await supabaseAdmin.storage
       .from('postry-bucket')
@@ -40,7 +62,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     }
 
     // Convert blob to File for OpenAI
-    const file = new File([fileData], asset.filename, { type: asset.file_type });
+    const file = new File([fileData], asset.file_name, { type: asset.file_type });
 
     // Transcribe with Whisper
     const transcription = await openai.audio.transcriptions.create({

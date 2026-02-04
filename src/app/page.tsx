@@ -2,7 +2,19 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Sparkles, Zap, Calendar, Palette, FileText, Video, ArrowRight, Check } from 'lucide-react';
+import {
+  Sparkles,
+  Zap,
+  Calendar,
+  Palette,
+  FileText,
+  Video,
+  ArrowRight,
+  Wand2,
+  LayoutGrid,
+  Workflow,
+  ClipboardCheck,
+} from 'lucide-react';
 import AuthModal from '@/components/AuthModal';
 import UserDropdown from '@/components/UserDropdown';
 import { createClient } from '@/lib/supabase/client';
@@ -47,10 +59,34 @@ const features = [
 ];
 
 const benefits = [
-  'No more repeating brand tone in every prompt',
-  'Organized projects, not infinite chat histories',
-  'Single workflow for text, scripts, and images',
-  'Real agency-style approval process',
+  {
+    icon: Wand2,
+    text: 'No more repeating brand tone in every prompt',
+    color: 'from-purple-500/30 to-purple-500/10',
+    iconColor: 'text-purple-400',
+    shadow: 'drop-shadow-[0_2px_8px_rgba(168,85,247,0.3)]',
+  },
+  {
+    icon: LayoutGrid,
+    text: 'Organized projects, not infinite chat histories',
+    color: 'from-blue-500/30 to-blue-500/10',
+    iconColor: 'text-blue-400',
+    shadow: 'drop-shadow-[0_2px_8px_rgba(59,130,246,0.3)]',
+  },
+  {
+    icon: Workflow,
+    text: 'Single workflow for text, scripts and images',
+    color: 'from-cyan-500/30 to-cyan-500/10',
+    iconColor: 'text-cyan-400',
+    shadow: 'drop-shadow-[0_2px_8px_rgba(6,182,212,0.3)]',
+  },
+  {
+    icon: ClipboardCheck,
+    text: 'Real agency-style approval process',
+    color: 'from-success/30 to-success/10',
+    iconColor: 'text-success',
+    shadow: 'drop-shadow-[0_2px_8px_rgba(34,197,94,0.3)]',
+  },
 ];
 
 export default function HomePage() {
@@ -192,26 +228,87 @@ export default function HomePage() {
       </section>
 
       {/* Benefits Section */}
-      <section className="bg-background-secondary px-4 py-20">
-        <div className="mx-auto max-w-7xl">
-          <div className="mb-12 text-center">
+      <section className="relative overflow-hidden bg-background-secondary px-6 py-20">
+        {/* Animated Background Grid */}
+        <div className="pointer-events-none absolute inset-0">
+          <div className="absolute inset-0 bg-[linear-gradient(rgba(139,92,246,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(139,92,246,0.03)_1px,transparent_1px)] bg-[size:40px_40px]" />
+          <div className="absolute left-1/4 top-0 h-96 w-96 rounded-full bg-primary/10 opacity-50 blur-3xl" />
+          <div className="absolute bottom-0 right-1/4 h-96 w-96 rounded-full bg-purple-500/10 opacity-50 blur-3xl" />
+        </div>
+
+        <div className="relative z-10 mx-auto max-w-7xl">
+          <div className="mb-16 text-center">
+            <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-2">
+              <Zap className="h-4 w-4 text-primary" />
+              <span className="text-sm font-medium text-primary">Built Different</span>
+            </div>
             <h2 className="mb-4 text-3xl font-bold text-foreground sm:text-4xl">
               Why Postry AI vs. ChatGPT?
             </h2>
-            <p className="mx-auto max-w-2xl text-foreground-muted">
+            <p className="mx-auto max-w-2xl text-lg text-foreground-muted">
               Stop copy-pasting between chats. Get a purpose-built content factory.
             </p>
           </div>
-          <div className="mx-auto grid max-w-3xl gap-4 md:grid-cols-2">
+
+          <div className="mx-auto grid max-w-5xl gap-8 md:grid-cols-2">
             {benefits.map((benefit, index) => (
               <div
                 key={index}
-                className="flex items-center gap-3 rounded-lg border border-border bg-background p-4"
+                className="hover:p-b[15px] group relative overflow-hidden rounded-2xl p-[2px] pb-[10px]"
               >
-                <div className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-success/20">
-                  <Check className="h-4 w-4 text-success" />
+                {/* Gradient Border */}
+                <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary via-purple-500 to-primary opacity-50 blur-sm" />
+                <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-primary/30 via-purple-500/30 to-cyan-500/30" />
+
+                {/* Card Background with Gradient */}
+                <div className="relative h-full rounded-2xl bg-gradient-to-br from-background via-background-secondary to-background p-6 shadow-xl shadow-primary/10">
+                  {/* Gradient Overlays */}
+                  <div className="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/5 via-transparent to-purple-500/5" />
+                  <div className="pointer-events-none absolute inset-0 rounded-2xl bg-[radial-gradient(circle_at_top_right,rgba(139,92,246,0.1),transparent_50%)]" />
+                  <div className="pointer-events-none absolute inset-0 rounded-2xl bg-[radial-gradient(circle_at_bottom_left,rgba(168,85,247,0.08),transparent_50%)]" />
+
+                  {/* Decorative Glow Elements */}
+                  <div className="pointer-events-none absolute -right-12 -top-12 h-32 w-32 rounded-full bg-primary/15 blur-2xl" />
+                  <div className="pointer-events-none absolute -bottom-8 -left-8 h-24 w-24 rounded-full bg-purple-500/15 blur-2xl" />
+
+                  {/* Accent Lines */}
+                  <div className="absolute left-0 top-0 h-24 w-24 opacity-40">
+                    <div className="absolute left-0 top-0 h-px w-12 bg-gradient-to-r from-primary via-purple-500 to-transparent" />
+                    <div className="absolute left-0 top-0 h-12 w-px bg-gradient-to-b from-primary via-purple-500 to-transparent" />
+                  </div>
+                  <div className="absolute bottom-0 right-0 h-24 w-24 opacity-40">
+                    <div className="absolute bottom-0 right-0 h-px w-12 bg-gradient-to-l from-primary via-purple-500 to-transparent" />
+                    <div className="absolute bottom-0 right-0 h-12 w-px bg-gradient-to-t from-primary via-purple-500 to-transparent" />
+                  </div>
+
+                  {/* Content */}
+                  <div className="relative z-10 flex items-center gap-5">
+                    {/* Icon Container */}
+                    <div className="relative flex h-16 w-16 flex-shrink-0 items-center justify-center">
+                      {/* Multi-layer background with animated gradient */}
+                      <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-primary/20 via-purple-500/10 to-transparent" />
+                      <div
+                        className={`absolute inset-0 rounded-xl bg-gradient-to-br ${benefit.color}`}
+                      />
+                      <div className="absolute inset-0 rounded-xl bg-gradient-to-tl from-transparent via-transparent to-white/10" />
+                      <div className="absolute inset-[3px] rounded-lg bg-gradient-to-br from-background/60 via-background/80 to-background/60 backdrop-blur-sm" />
+
+                      {/* Icon */}
+                      <div className="relative flex h-full w-full items-center justify-center">
+                        <benefit.icon
+                          className={`h-8 w-8 ${benefit.iconColor} ${benefit.shadow}`}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Text */}
+                    <div className="min-h-0 flex-1">
+                      <p className="text-lg font-semibold leading-relaxed text-slate-300">
+                        {benefit.text}
+                      </p>
+                    </div>
+                  </div>
                 </div>
-                <span className="text-foreground">{benefit}</span>
               </div>
             ))}
           </div>

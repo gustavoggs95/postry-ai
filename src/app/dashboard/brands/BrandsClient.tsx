@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { toast } from 'sonner';
 import { User } from '@supabase/supabase-js';
 import { Plus, MoreVertical, Edit2, Trash2, Star, Search, Palette } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
@@ -34,8 +35,11 @@ export default function BrandsClient({ user, initialBrands }: BrandsClientProps)
 
   const handleDelete = async (id: string) => {
     const { error } = await supabase.from('brands').delete().eq('id', id);
-    if (!error) {
+    if (error) {
+      toast.error('Failed to delete brand');
+    } else {
       deleteBrand(id);
+      toast.success('Brand deleted successfully');
     }
     setOpenMenuId(null);
   };
@@ -45,8 +49,11 @@ export default function BrandsClient({ user, initialBrands }: BrandsClientProps)
     await supabase.from('brands').update({ is_default: false }).eq('user_id', user.id);
     // Then set the new default
     const { error } = await supabase.from('brands').update({ is_default: true }).eq('id', id);
-    if (!error) {
+    if (error) {
+      toast.error('Failed to set default brand');
+    } else {
       setDefaultBrand(id);
+      toast.success('Default brand updated');
     }
     setOpenMenuId(null);
   };

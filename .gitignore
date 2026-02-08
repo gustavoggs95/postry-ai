@@ -3,6 +3,10 @@ node_modules/
 .pnp
 .pnp.js
 
+.yarn/install-state.gz
+install-state.gz
+install-state
+
 # Build outputs
 dist/
 build/

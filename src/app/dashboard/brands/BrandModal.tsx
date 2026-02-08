@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { toast } from 'sonner';
 import { X, Loader2, Sparkles } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { useBrandStore, Brand, BrandTone, CreateBrandInput } from '@/lib/stores';
@@ -39,7 +40,6 @@ export default function BrandModal({ isOpen, onClose, editingBrand, userId }: Br
   const supabase = createClient();
   const { addBrand, updateBrand } = useBrandStore();
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   const [formData, setFormData] = useState<CreateBrandInput>({
     name: '',
@@ -78,13 +78,11 @@ export default function BrandModal({ isOpen, onClose, editingBrand, userId }: Br
         keywords: [],
       });
     }
-    setError(null);
   }, [editingBrand, isOpen]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    setError(null);
 
     try {
       if (editingBrand) {
@@ -107,6 +105,7 @@ export default function BrandModal({ isOpen, onClose, editingBrand, userId }: Br
 
         if (error) throw error;
         updateBrand(editingBrand.id, data);
+        toast.success('Brand updated successfully');
       } else {
         // Create new brand
         const { data, error } = await supabase
@@ -127,11 +126,12 @@ export default function BrandModal({ isOpen, onClose, editingBrand, userId }: Br
 
         if (error) throw error;
         addBrand(data);
+        toast.success('Brand created successfully');
       }
 
       onClose();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
+      toast.error(err instanceof Error ? err.message : 'An error occurred');
     } finally {
       setIsLoading(false);
     }
@@ -188,12 +188,6 @@ export default function BrandModal({ isOpen, onClose, editingBrand, userId }: Br
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-6 p-6">
-          {error && (
-            <div className="rounded-lg border border-error/20 bg-error/10 p-3 text-sm text-error">
-              {error}
-            </div>
-          )}
-
           {/* Name */}
           <div>
             <label htmlFor="name" className="label">

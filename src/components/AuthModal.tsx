@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { toast } from 'sonner';
 import Modal from 'react-modal';
 import { createClient } from '@/lib/supabase/client';
 import { X } from 'lucide-react';
@@ -21,13 +22,11 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
 
   const supabase = createClient();
 
   const handleGoogleSignIn = async () => {
     setLoading(true);
-    setError('');
 
     try {
       const { error } = await supabase.auth.signInWithOAuth({
@@ -39,7 +38,7 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
 
       if (error) throw error;
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to sign in with Google');
+      toast.error(err instanceof Error ? err.message : 'Failed to sign in with Google');
       setLoading(false);
     }
   };
@@ -47,7 +46,6 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
   const handleEmailAuth = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setError('');
 
     try {
       if (view === 'login') {
@@ -56,6 +54,7 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
           password,
         });
         if (error) throw error;
+        toast.success('Logged in successfully!');
         window.location.href = '/dashboard';
       } else {
         const { error } = await supabase.auth.signUp({
@@ -66,10 +65,10 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
           },
         });
         if (error) throw error;
-        setError('Check your email to confirm your account!');
+        toast.success('Check your email to confirm your account!');
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Authentication failed');
+      toast.error(err instanceof Error ? err.message : 'Authentication failed');
     } finally {
       setLoading(false);
     }
@@ -130,19 +129,6 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
               {view === 'login' ? 'Sign in to continue to Postry AI' : 'Get started with Postry AI'}
             </p>
           </div>
-
-          {/* Error message */}
-          {error && (
-            <div
-              className={`mb-4 rounded-lg p-3 text-sm ${
-                error.includes('Check your email')
-                  ? 'border border-green-500/20 bg-green-500/10 text-green-400'
-                  : 'border border-red-500/20 bg-red-500/10 text-red-400'
-              }`}
-            >
-              {error}
-            </div>
-          )}
 
           {/* Google Sign In */}
           <button

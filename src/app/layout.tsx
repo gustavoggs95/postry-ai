@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+import { Toaster } from 'sonner';
 import './globals.css';
 import './modal.css';
 
@@ -32,7 +33,10 @@ export default function RootLayout({
       <head>
         <link rel="icon" href="/images/postry-favicon.png" />
       </head>
-      <body className={`${inter.variable} font-sans`}>{children}</body>
+      <body className={`${inter.variable} font-sans`}>
+        {children}
+        <Toaster position="top-right" richColors theme="dark" />
+      </body>
     </html>
   );
 }

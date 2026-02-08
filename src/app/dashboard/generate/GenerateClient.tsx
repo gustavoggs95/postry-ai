@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { toast } from 'sonner';
 import {
   Sparkles,
   Link as LinkIcon,
@@ -48,7 +49,6 @@ export default function GenerateClient({ initialBrands }: GenerateClientProps) {
   const [generatedContent, setGeneratedContent] = useState<Record<string, string>>({});
   const [generatedImageUrl, setGeneratedImageUrl] = useState<string | null>(null);
   const [copiedPlatform, setCopiedPlatform] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
   const [brandDropdownOpen, setBrandDropdownOpen] = useState(false);
 
   useEffect(() => {
@@ -69,26 +69,25 @@ export default function GenerateClient({ initialBrands }: GenerateClientProps) {
 
   const handleGenerate = async () => {
     if (!selectedBrand) {
-      setError('Please select a brand preset first');
+      toast.error('Please select a brand preset first');
       return;
     }
 
     if (inputType === 'url' && !urlInput) {
-      setError('Please enter a URL');
+      toast.error('Please enter a URL');
       return;
     }
 
     if (inputType === 'text' && !textInput) {
-      setError('Please enter some text');
+      toast.error('Please enter some text');
       return;
     }
 
     if (selectedPlatforms.length === 0) {
-      setError('Please select at least one platform');
+      toast.error('Please select at least one platform');
       return;
     }
 
-    setError(null);
     setGenerating(true);
     setGeneratedContent({});
     setGeneratedImageUrl(null);
@@ -126,8 +125,9 @@ export default function GenerateClient({ initialBrands }: GenerateClientProps) {
       const data = await response.json();
       setGeneratedContent(data.generated);
       setGeneratedImageUrl(data.imageUrl);
+      toast.success('Content generated successfully!');
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to generate content');
+      toast.error(err instanceof Error ? err.message : 'Failed to generate content');
     } finally {
       setGenerating(false);
     }
@@ -137,6 +137,7 @@ export default function GenerateClient({ initialBrands }: GenerateClientProps) {
     await navigator.clipboard.writeText(content);
     setCopiedPlatform(platform);
     setTimeout(() => setCopiedPlatform(null), 2000);
+    toast.success('Copied to clipboard!');
   };
 
   return (
@@ -357,13 +358,6 @@ export default function GenerateClient({ initialBrands }: GenerateClientProps) {
                 {selectedModel === 'gpt-5-nano' && 'Fastest generation - most cost-effective'}
               </p>
             </div>
-
-            {/* Error Message */}
-            {error && (
-              <div className="rounded-lg border border-error/20 bg-error/10 p-3 text-sm text-error">
-                {error}
-              </div>
-            )}
 
             {/* Generate Button */}
             <button

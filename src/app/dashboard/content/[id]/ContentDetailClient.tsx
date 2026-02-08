@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import {
   ArrowLeft,
@@ -45,6 +46,7 @@ export default function ContentDetailClient({ content }: ContentDetailClientProp
     navigator.clipboard.writeText(text);
     setCopiedPlatform(platform);
     setTimeout(() => setCopiedPlatform(null), 2000);
+    toast.success('Copied to clipboard!');
   };
 
   const generatedContent = content.generated_content || {};

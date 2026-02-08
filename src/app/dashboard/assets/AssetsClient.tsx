@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef } from 'react';
+import { toast } from 'sonner';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
 import { DEFAULT_BRAND } from '@/lib/constants/default-brand';
@@ -63,14 +64,14 @@ export default function AssetsClient({ initialAssets, brands }: AssetsClientProp
       'audio/mp3',
     ];
     if (!validTypes.includes(file.type)) {
-      alert('Please upload a valid video or audio file (MP4, WebM, MOV, MP3, WAV)');
+      toast.error('Please upload a valid video or audio file (MP4, WebM, MOV, MP3, WAV)');
       return;
     }
 
     // Validate file size (max 100MB)
     const maxSize = 100 * 1024 * 1024;
     if (file.size > maxSize) {
-      alert('File size must be less than 100MB');
+      toast.error('File size must be less than 100MB');
       return;
     }
 
@@ -96,7 +97,7 @@ export default function AssetsClient({ initialAssets, brands }: AssetsClientProp
         throw new Error('Failed to check upload limit');
       }
       if ((uploadCount ?? 0) >= 5) {
-        alert('Monthly upload limit reached (5 uploads per month)');
+        toast.error('Monthly upload limit reached (5 uploads per month)');
         return;
       }
 
@@ -142,6 +143,7 @@ export default function AssetsClient({ initialAssets, brands }: AssetsClientProp
 
       setUploadProgress(100);
       setAssets((prev) => [assetData, ...prev]);
+      toast.success('File uploaded successfully!');
 
       // Reset input
       if (fileInputRef.current) {
@@ -149,7 +151,7 @@ export default function AssetsClient({ initialAssets, brands }: AssetsClientProp
       }
     } catch (error) {
       console.error('Upload error:', error);
-      alert('Failed to upload file. Please try again.');
+      toast.error('Failed to upload file. Please try again.');
     } finally {
       setUploading(false);
       setUploadProgress(0);
@@ -183,9 +185,10 @@ export default function AssetsClient({ initialAssets, brands }: AssetsClientProp
         prev.map((a) => (a.id === asset.id ? { ...a, transcription: data.transcription } : a))
       );
       setSelectedAsset({ ...asset, transcription: data.transcription });
+      toast.success('Transcription completed!');
     } catch (error) {
       console.error('Transcription error:', error);
-      alert('Failed to transcribe. Please try again.');
+      toast.error('Failed to transcribe. Please try again.');
     } finally {
       setTranscribing(false);
     }
@@ -193,7 +196,7 @@ export default function AssetsClient({ initialAssets, brands }: AssetsClientProp
 
   const handleGenerateContent = async () => {
     if (!selectedAsset?.transcription) {
-      alert('Please transcribe the asset first');
+      toast.error('Please transcribe the asset first');
       return;
     }
 
@@ -235,9 +238,10 @@ export default function AssetsClient({ initialAssets, brands }: AssetsClientProp
         blogOutline: data.generated?.blog || '',
         reelsIdeas: data.generated?.instagram?.split('\n\n').filter((i: string) => i.trim()) || [],
       });
+      toast.success('Content generated successfully!');
     } catch (error) {
       console.error('Generation error:', error);
-      alert(
+      toast.error(
         error instanceof Error ? error.message : 'Failed to generate content. Please try again.'
       );
     } finally {
@@ -260,9 +264,10 @@ export default function AssetsClient({ initialAssets, brands }: AssetsClientProp
         setSelectedAsset(null);
         setGeneratedContent(null);
       }
+      toast.success('Asset deleted successfully');
     } catch (error) {
       console.error('Delete error:', error);
-      alert('Failed to delete asset.');
+      toast.error('Failed to delete asset.');
     }
   };
 

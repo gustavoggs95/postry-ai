@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import {
   Plus,
@@ -39,16 +40,22 @@ export default function ContentClient({ initialContent }: ContentClientProps) {
 
   const handleDelete = async (id: string) => {
     const { error } = await supabase.from('content').delete().eq('id', id);
-    if (!error) {
+    if (error) {
+      toast.error('Failed to delete content');
+    } else {
       deleteContent(id);
+      toast.success('Content deleted successfully');
     }
     setOpenMenuId(null);
   };
 
   const handleStatusChange = async (id: string, status: ContentStatus) => {
     const { error } = await supabase.from('content').update({ status }).eq('id', id);
-    if (!error) {
+    if (error) {
+      toast.error('Failed to update status');
+    } else {
       updateContent(id, { status });
+      toast.success(`Content marked as ${status}`);
     }
     setOpenMenuId(null);
   };

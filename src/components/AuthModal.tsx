@@ -217,7 +217,6 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
             <button
               onClick={() => {
                 setView(view === 'login' ? 'signup' : 'login');
-                setError('');
                 setEmail('');
                 setPassword('');
               }}
